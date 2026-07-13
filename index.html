@@ -129,12 +129,6 @@ main{
   letter-spacing:.08em;color:var(--gold-light);margin-bottom:10px;
 }
 .cartao p{color:var(--cream-dim);font-size:.95rem}
-.selo{
-  display:inline-block;margin-top:14px;
-  font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--gold);border:1px solid var(--gold);
-  border-radius:999px;padding:4px 12px;
-}
 .versiculo{
   font-family:'Cormorant Garamond',serif;font-style:italic;
   text-align:center;color:var(--cream-dim);
@@ -150,7 +144,7 @@ main{
 #btnSair:active{border-color:var(--gold);color:var(--gold-light)}
 
 /* ============================================================
-   BLOCOS DO CONSTRUTOR
+   BLOCOS / FORMULÁRIOS
    ============================================================ */
 .bloco{
   background:var(--navy-800);
@@ -177,14 +171,15 @@ main{
   font-family:'Cormorant Garamond',serif;font-style:italic;
   color:var(--cream-dim);font-size:.98rem;margin-bottom:10px;
 }
-textarea{
-  width:100%;min-height:74px;resize:vertical;
+textarea, input[type=text]{
+  width:100%;
   background:var(--navy-700);border:1px solid var(--navy-600);
   border-radius:10px;padding:12px;
   color:var(--cream);font-family:'Inter',sans-serif;font-size:.95rem;
   line-height:1.5;
 }
-textarea:focus{outline:none;border-color:var(--gold)}
+textarea{min-height:74px;resize:vertical}
+textarea:focus, input[type=text]:focus{outline:none;border-color:var(--gold)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .chips button{
   background:var(--navy-700);border:1px solid var(--navy-600);
@@ -193,6 +188,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
   transition:border-color .15s,color .15s;text-align:left;
 }
 .chips button:active{border-color:var(--gold);color:var(--gold-light)}
+.chips button.filtroAtivo{border-color:var(--gold);color:var(--gold-light);background:rgba(201,162,39,.1)}
 
 /* Interruptor */
 .linhaChave{
@@ -218,14 +214,14 @@ textarea:focus{outline:none;border-color:var(--gold)}
 .chave.ligada{background:var(--gold)}
 .chave.ligada::after{transform:translateX(22px);background:#0d1b2e}
 
-/* Seletores (IA de destino, nível) */
+/* Seletores */
 .linhaSelecao{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .grupoSel{flex:1;min-width:140px}
 .grupoSel label{
   display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
   color:var(--cream-dim);margin-bottom:6px;
 }
-.grupoSel select{
+select{
   width:100%;padding:12px;border-radius:10px;
   background:var(--navy-700);border:1px solid var(--navy-600);
   color:var(--cream);font-family:'Inter',sans-serif;font-size:.92rem;
@@ -233,10 +229,10 @@ textarea:focus{outline:none;border-color:var(--gold)}
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23c9a227' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
   background-repeat:no-repeat;background-position:right 12px center;
 }
-.grupoSel select:focus{outline:none;border-color:var(--gold)}
+select:focus{outline:none;border-color:var(--gold)}
 
-/* Resultado da IA */
-.resultado{
+/* Resultado da IA / prévia */
+.resultado, #previa{
   background:#0a1524;border:1px solid var(--gold);
   border-radius:var(--radius);padding:18px 16px;
   white-space:pre-wrap;word-wrap:break-word;
@@ -244,7 +240,8 @@ textarea:focus{outline:none;border-color:var(--gold)}
   font-size:.84rem;line-height:1.6;color:var(--cream);
   min-height:60px;
 }
-.resultado .vazio{
+#previa{min-height:80px}
+.resultado .vazio, #previa .vazio{
   font-family:'Cormorant Garamond',serif;font-style:italic;
   color:var(--cream-dim);font-size:1rem;
 }
@@ -259,22 +256,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
   display:block;font-family:'Cinzel',serif;font-size:.8rem;
   letter-spacing:.08em;color:var(--gold-light);margin-bottom:6px;
 }
-
-/* Prévia do Construtor */
-#previa{
-  background:#0a1524;border:1px solid var(--gold);
-  border-radius:var(--radius);padding:18px 16px;
-  white-space:pre-wrap;word-wrap:break-word;
-  font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
-  font-size:.84rem;line-height:1.6;color:var(--cream);
-  min-height:80px;
-}
-#previa .vazio,
-#contadorPrevia{color:var(--cream-dim)}
-#previa .vazio{
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;
-}
-#contadorPrevia{text-align:right;font-size:.75rem;margin-top:6px}
+#contadorPrevia{text-align:right;font-size:.75rem;margin-top:6px;color:var(--cream-dim)}
 
 /* Botões */
 .acoes{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
@@ -290,18 +272,113 @@ textarea:focus{outline:none;border-color:var(--gold)}
 .btn-contorno:active{border-color:var(--gold);color:var(--gold-light)}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
 
-/* Spinner de carregamento */
+/* Spinner */
 .girando{
   width:18px;height:18px;border-radius:50%;
   border:2px solid rgba(13,27,46,.3);border-top-color:#0d1b2e;
   animation:girar .7s linear infinite;
 }
 @keyframes girar{to{transform:rotate(360deg)}}
+.girandoOuro{
+  width:26px;height:26px;border-radius:50%;
+  border:3px solid var(--navy-600);border-top-color:var(--gold);
+  animation:girar .7s linear infinite;margin:20px auto;
+}
 .msgErro{
   color:var(--err);font-size:.86rem;margin-top:10px;
   background:rgba(217,83,79,.08);border:1px solid rgba(217,83,79,.4);
   border-radius:10px;padding:10px 14px;display:none;
 }
+
+/* ============================================================
+   BIBLIOTECA
+   ============================================================ */
+#buscaBiblioteca{margin-bottom:12px}
+.itemPrompt{
+  background:var(--navy-800);border:1px solid var(--navy-600);
+  border-radius:var(--radius);padding:16px;margin-bottom:12px;
+}
+.itemPrompt .topo{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+}
+.itemPrompt h4{
+  font-family:'Cinzel',serif;font-weight:600;font-size:.98rem;
+  color:var(--cream);line-height:1.35;flex:1;
+}
+.btnEstrela{
+  background:none;border:none;cursor:pointer;
+  font-size:1.35rem;line-height:1;flex-shrink:0;
+  filter:grayscale(1);opacity:.45;transition:filter .15s,opacity .15s;
+}
+.btnEstrela.fav{filter:none;opacity:1}
+.itemPrompt .meta{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;
+}
+.etiqueta{
+  font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;
+  border-radius:999px;padding:2px 10px;
+  border:1px solid var(--navy-600);color:var(--cream-dim);
+}
+.etiqueta.cat{border-color:var(--gold);color:var(--gold-light)}
+.itemPrompt .corpoPrompt{
+  display:none;margin-top:12px;
+  background:#0a1524;border:1px solid var(--navy-600);
+  border-radius:10px;padding:12px;
+  white-space:pre-wrap;word-wrap:break-word;
+  font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  font-size:.8rem;line-height:1.55;color:var(--cream);
+  max-height:300px;overflow-y:auto;
+}
+.itemPrompt.aberto .corpoPrompt{display:block}
+.itemPrompt .acoesItem{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.itemPrompt .acoesItem button{
+  flex:1;min-width:88px;padding:10px;border-radius:10px;
+  font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;
+  cursor:pointer;
+}
+.btnUsar{background:var(--gold);border:none;color:#0d1b2e}
+.btnVer{background:none;border:1px solid var(--navy-600);color:var(--cream-dim)}
+.btnExcluir{background:none;border:1px solid rgba(217,83,79,.5);color:var(--err)}
+.avisoBiblioteca{
+  text-align:center;color:var(--cream-dim);
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.05rem;padding:26px 14px;
+}
+
+/* ============================================================
+   MODAIS
+   ============================================================ */
+.fundoModal{
+  position:fixed;inset:0;z-index:90;
+  background:rgba(5,10,18,.75);
+  display:none;align-items:flex-end;justify-content:center;
+}
+.fundoModal.aberto{display:flex}
+.caixaModal{
+  background:var(--navy-800);
+  border:1px solid var(--gold);
+  border-radius:18px 18px 0 0;
+  width:100%;max-width:760px;
+  max-height:85dvh;overflow-y:auto;
+  padding:22px 20px calc(22px + env(safe-area-inset-bottom));
+  animation:subir .25s ease;
+}
+@keyframes subir{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.caixaModal h3{
+  font-family:'Cinzel',serif;font-weight:600;font-size:1.05rem;
+  letter-spacing:.07em;color:var(--gold-light);margin-bottom:14px;
+}
+.campoModal{margin-bottom:14px}
+.campoModal label{
+  display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--cream-dim);margin-bottom:6px;
+}
+.infoVars{
+  font-size:.82rem;color:var(--cream-dim);
+  background:var(--navy-700);border-radius:10px;padding:10px 14px;
+  margin-bottom:14px;
+}
+.infoVars code{color:var(--gold-light);font-size:.82rem}
 
 /* Toast */
 #toast{
@@ -311,14 +388,15 @@ textarea:focus{outline:none;border-color:var(--gold)}
   font-weight:600;font-size:.9rem;
   padding:12px 22px;border-radius:999px;
   opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
-  z-index:80;white-space:nowrap;
+  z-index:95;white-space:nowrap;
 }
 #toast.mostrar{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media (prefers-reduced-motion:reduce){
   .aba{animation:none}
   #toast,.chave,.chave::after{transition:none}
-  .girando{animation-duration:1.4s}
+  .girando,.girandoOuro{animation-duration:1.4s}
+  .caixaModal{animation:none}
 }
 </style>
 </head>
@@ -332,15 +410,18 @@ const CONFIG = {
   // Hash SHA-256 do PIN. Padrão: 1010
   PIN_HASH: "7a5df5ffa0dec2228d90b8d0a0f1b0767b748b0a41314c123075b8289e4e053f",
 
-  // Etapa 4 - Supabase (mesmo projeto dos seus outros apps)
+  // >>> ETAPA 4: cole aqui a chave anon do Supabase (a mesma dos seus outros apps) <<<
   SUPABASE_URL: "https://ghjbljypxksubmcsvaig.supabase.co",
   SUPABASE_ANON_KEY: "COLE_AQUI_SUA_CHAVE_ANON",
 
-  // >>> ETAPA 3: cole aqui a URL do seu Cloudflare Worker (a mesma do KTL) <<<
+  // Cloudflare Worker dedicado do PromptFlow
   WORKER_URL: "https://promptflow-ia.eneaspr.workers.dev",
 
   // Modelo usado para gerar/melhorar prompts
   MODELO_IA: "claude-haiku-4-5",
+
+  // Categorias da Biblioteca
+  CATEGORIAS: ["Homilética","Teologia","Estudos","Apps","Igreja","Pessoal"],
 
   // Bloco confessional
   PERFIL_TEOLOGICO:
@@ -456,11 +537,11 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
       <div id="previa"><span class="vazio">Preencha os blocos acima e o prompt aparecerá aqui, pronto para copiar…</span></div>
       <div id="contadorPrevia"></div>
       <div class="acoes">
-        <button class="btn btn-ouro" id="btnCopiar">📋 Copiar Prompt</button>
-        <button class="btn btn-contorno" id="btnLimpar">🗑 Limpar Tudo</button>
+        <button class="btn btn-ouro" id="btnCopiar">📋 Copiar</button>
+        <button class="btn btn-ouro" id="btnSalvarConstrutor">💾 Salvar</button>
       </div>
       <div class="acoes">
-        <button class="btn btn-contorno" disabled title="Disponível na Etapa 4">💾 Salvar na Biblioteca (Etapa 4)</button>
+        <button class="btn btn-contorno" id="btnLimpar">🗑 Limpar Tudo</button>
       </div>
     </div>
   </section>
@@ -511,7 +592,7 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
       <div class="resultado" id="resGerar"><span class="vazio">O prompt gerado pela IA aparecerá aqui…</span></div>
       <div class="acoes">
         <button class="btn btn-ouro" id="btnCopiarGerar" disabled>📋 Copiar</button>
-        <button class="btn btn-contorno" disabled title="Disponível na Etapa 4">💾 Salvar (Etapa 4)</button>
+        <button class="btn btn-ouro" id="btnSalvarGerar" disabled>💾 Salvar</button>
       </div>
     </div>
   </section>
@@ -548,17 +629,17 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
       <div class="explicacao" id="expMelhorar" style="display:none"></div>
       <div class="acoes">
         <button class="btn btn-ouro" id="btnCopiarMelhorar" disabled>📋 Copiar</button>
-        <button class="btn btn-contorno" disabled title="Disponível na Etapa 4">💾 Salvar (Etapa 4)</button>
+        <button class="btn btn-ouro" id="btnSalvarMelhorar" disabled>💾 Salvar</button>
       </div>
     </div>
   </section>
 
   <!-- ============ ABA 4: BIBLIOTECA ============ -->
   <section class="aba" id="aba-biblioteca">
-    <div class="cartao">
-      <h2>📚 Biblioteca</h2>
-      <p>Seus prompts salvos no Supabase, organizados por categoria (Homilética, Teologia, Estudos, Apps, Igreja, Pessoal), com favoritos, busca e variáveis reutilizáveis.</p>
-      <span class="selo">Chega na Etapa 4</span>
+    <input type="text" id="buscaBiblioteca" placeholder="🔎 Buscar por título ou conteúdo...">
+    <div class="chips" id="filtrosCategoria" style="margin-bottom:14px"></div>
+    <div id="listaBiblioteca">
+      <div class="avisoBiblioteca">Carregando…</div>
     </div>
   </section>
 
@@ -574,6 +655,39 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
   <button data-aba="melhorar"><span class="ico">🔧</span>Melhorar</button>
   <button data-aba="biblioteca"><span class="ico">📚</span>Biblioteca</button>
 </nav>
+
+<!-- ---------- MODAL: SALVAR PROMPT ---------- -->
+<div class="fundoModal" id="modalSalvar">
+  <div class="caixaModal">
+    <h3>💾 Salvar na Biblioteca</h3>
+    <div class="campoModal">
+      <label for="s-titulo">Título</label>
+      <input type="text" id="s-titulo" placeholder="Ex.: Estudo de célula sobre salmos">
+    </div>
+    <div class="campoModal">
+      <label for="s-categoria">Categoria</label>
+      <select id="s-categoria"></select>
+    </div>
+    <div class="infoVars" id="s-vars" style="display:none"></div>
+    <div class="acoes" style="margin-top:6px">
+      <button class="btn btn-ouro" id="btnConfirmarSalvar">Salvar</button>
+      <button class="btn btn-contorno" onclick="fecharModal('modalSalvar')">Cancelar</button>
+    </div>
+    <div class="msgErro" id="erroSalvar"></div>
+  </div>
+</div>
+
+<!-- ---------- MODAL: PREENCHER VARIÁVEIS ---------- -->
+<div class="fundoModal" id="modalVars">
+  <div class="caixaModal">
+    <h3>✏️ Preencher variáveis</h3>
+    <div id="camposVars"></div>
+    <div class="acoes" style="margin-top:6px">
+      <button class="btn btn-ouro" id="btnCopiarPreenchido">📋 Copiar preenchido</button>
+      <button class="btn btn-contorno" onclick="fecharModal('modalVars')">Cancelar</button>
+    </div>
+  </div>
+</div>
 
 <div id="toast"></div>
 
@@ -635,6 +749,8 @@ function sair(){
 /* ============================================================
    NAVEGAÇÃO ENTRE ABAS
    ============================================================ */
+let bibliotecaCarregada = false;
+
 document.querySelectorAll("nav button").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     document.querySelectorAll("nav button").forEach(b=>b.classList.remove("ativa"));
@@ -642,11 +758,14 @@ document.querySelectorAll("nav button").forEach(btn=>{
     document.querySelectorAll(".aba").forEach(a=>a.classList.remove("visivel"));
     document.getElementById("aba-" + btn.dataset.aba).classList.add("visivel");
     window.scrollTo({top:0});
+    if(btn.dataset.aba === "biblioteca" && !bibliotecaCarregada){
+      carregarBiblioteca();
+    }
   });
 });
 
 /* ============================================================
-   TOAST
+   TOAST E MODAIS
    ============================================================ */
 let toastTimer = null;
 function toast(msg){
@@ -657,13 +776,344 @@ function toast(msg){
   toastTimer = setTimeout(()=> t.classList.remove("mostrar"), 2200);
 }
 
+function abrirModal(id){ document.getElementById(id).classList.add("aberto"); }
+function fecharModal(id){ document.getElementById(id).classList.remove("aberto"); }
+
+// Fechar modal tocando fora da caixa
+document.querySelectorAll(".fundoModal").forEach(m=>{
+  m.addEventListener("click", e=>{ if(e.target === m) m.classList.remove("aberto"); });
+});
+
+/* ============================================================
+   SUPABASE (REST)
+   ============================================================ */
+const TABELA = "promptflow_prompts";
+
+function supabaseConfigurado(){
+  return CONFIG.SUPABASE_ANON_KEY && !CONFIG.SUPABASE_ANON_KEY.startsWith("COLE");
+}
+
+async function sb(caminho, opcoes = {}){
+  if(!supabaseConfigurado()){
+    throw new Error("Supabase não configurado. Edite o index.html no GitHub e cole sua chave anon na linha SUPABASE_ANON_KEY (bloco CONFIG, topo do arquivo).");
+  }
+  const resp = await fetch(CONFIG.SUPABASE_URL + "/rest/v1/" + caminho, {
+    ...opcoes,
+    headers: {
+      "apikey": CONFIG.SUPABASE_ANON_KEY,
+      "Authorization": "Bearer " + CONFIG.SUPABASE_ANON_KEY,
+      "Content-Type": "application/json",
+      "Prefer": "return=representation",
+      ...(opcoes.headers || {})
+    }
+  });
+  if(!resp.ok){
+    const detalhe = await resp.text().catch(()=> "");
+    throw new Error("Supabase respondeu com erro " + resp.status + ". " + detalhe.slice(0,140));
+  }
+  if(resp.status === 204) return null;
+  return resp.json();
+}
+
+/* ============================================================
+   VARIÁVEIS {ASSIM}
+   ============================================================ */
+function detectarVariaveis(texto){
+  const encontradas = new Set();
+  const regex = /\{([A-ZÀ-Ü0-9_]{2,40})\}/g;
+  let m;
+  while((m = regex.exec(texto)) !== null) encontradas.add(m[1]);
+  return Array.from(encontradas);
+}
+
+/* ============================================================
+   SALVAR NA BIBLIOTECA (modal)
+   ============================================================ */
+let salvarPendente = null; // {conteudo, origem, ia_destino}
+
+function abrirSalvar(conteudo, origem, iaDestino){
+  if(!conteudo || !conteudo.trim()){ toast("Nada para salvar ainda"); return; }
+  salvarPendente = { conteudo: conteudo.trim(), origem, ia_destino: iaDestino };
+
+  // Sugere um título a partir das primeiras palavras
+  const sugestao = conteudo.replace(/^#[^\n]*\n/,"").trim().split(/\s+/).slice(0,7).join(" ");
+  document.getElementById("s-titulo").value = sugestao.length > 55 ? sugestao.slice(0,55) : sugestao;
+
+  // Preenche categorias
+  const sel = document.getElementById("s-categoria");
+  sel.innerHTML = "";
+  CONFIG.CATEGORIAS.forEach(c=>{
+    const op = document.createElement("option");
+    op.value = c; op.textContent = c;
+    sel.appendChild(op);
+  });
+
+  // Mostra variáveis detectadas
+  const vars = detectarVariaveis(conteudo);
+  const info = document.getElementById("s-vars");
+  if(vars.length){
+    info.innerHTML = "🔤 Variáveis detectadas: " + vars.map(v=>"<code>{"+v+"}</code>").join(" · ") +
+      "<br>Ao usar este prompt, o app pedirá os valores automaticamente.";
+    info.style.display = "block";
+  } else {
+    info.style.display = "none";
+  }
+
+  document.getElementById("erroSalvar").style.display = "none";
+  abrirModal("modalSalvar");
+}
+
+document.getElementById("btnConfirmarSalvar").addEventListener("click", async ()=>{
+  const titulo = document.getElementById("s-titulo").value.trim();
+  if(!titulo){ toast("Dê um título ao prompt"); return; }
+  const btn = document.getElementById("btnConfirmarSalvar");
+  btn.disabled = true;
+  try{
+    await sb(TABELA, {
+      method: "POST",
+      body: JSON.stringify({
+        titulo,
+        conteudo: salvarPendente.conteudo,
+        categoria: document.getElementById("s-categoria").value,
+        ia_destino: salvarPendente.ia_destino || "Genérica",
+        origem: salvarPendente.origem || "manual",
+        variaveis: detectarVariaveis(salvarPendente.conteudo)
+      })
+    });
+    fecharModal("modalSalvar");
+    toast("Salvo na Biblioteca! 📚");
+    bibliotecaCarregada = false; // força recarregar na próxima visita
+  } catch(err){
+    const el = document.getElementById("erroSalvar");
+    el.textContent = err.message;
+    el.style.display = "block";
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+/* ============================================================
+   BIBLIOTECA: carregar, filtrar, renderizar
+   ============================================================ */
+let todosPrompts = [];
+let filtroCategoria = "Todas";
+let filtroFavoritos = false;
+
+function montarFiltros(){
+  const alvo = document.getElementById("filtrosCategoria");
+  alvo.innerHTML = "";
+  const opcoes = ["Todas","⭐ Favoritos", ...CONFIG.CATEGORIAS];
+  opcoes.forEach(op=>{
+    const b = document.createElement("button");
+    b.textContent = op;
+    const ativo = (op === "⭐ Favoritos") ? filtroFavoritos
+                : (!filtroFavoritos && op === filtroCategoria);
+    if(ativo) b.classList.add("filtroAtivo");
+    b.addEventListener("click", ()=>{
+      if(op === "⭐ Favoritos"){
+        filtroFavoritos = !filtroFavoritos;
+      } else {
+        filtroFavoritos = false;
+        filtroCategoria = op;
+      }
+      montarFiltros();
+      renderLista();
+    });
+    alvo.appendChild(b);
+  });
+}
+
+async function carregarBiblioteca(){
+  const lista = document.getElementById("listaBiblioteca");
+  lista.innerHTML = '<div class="girandoOuro"></div>';
+  montarFiltros();
+  try{
+    todosPrompts = await sb(TABELA + "?select=*&order=favorito.desc,criado_em.desc");
+    bibliotecaCarregada = true;
+    renderLista();
+  } catch(err){
+    lista.innerHTML = "";
+    const aviso = document.createElement("div");
+    aviso.className = "avisoBiblioteca";
+    aviso.textContent = err.message;
+    lista.appendChild(aviso);
+  }
+}
+
+function renderLista(){
+  const lista = document.getElementById("listaBiblioteca");
+  const busca = document.getElementById("buscaBiblioteca").value.trim().toLowerCase();
+
+  let itens = todosPrompts;
+  if(filtroFavoritos) itens = itens.filter(p=>p.favorito);
+  else if(filtroCategoria !== "Todas") itens = itens.filter(p=>p.categoria === filtroCategoria);
+  if(busca){
+    itens = itens.filter(p=>
+      (p.titulo||"").toLowerCase().includes(busca) ||
+      (p.conteudo||"").toLowerCase().includes(busca)
+    );
+  }
+
+  lista.innerHTML = "";
+  if(!itens.length){
+    const aviso = document.createElement("div");
+    aviso.className = "avisoBiblioteca";
+    aviso.textContent = todosPrompts.length
+      ? "Nenhum prompt encontrado com esses filtros."
+      : "Sua Biblioteca ainda está vazia. Salve seu primeiro prompt pelo Construtor, Gerar IA ou Melhorar. 📚";
+    lista.appendChild(aviso);
+    return;
+  }
+
+  itens.forEach(p=>{
+    const item = document.createElement("div");
+    item.className = "itemPrompt";
+
+    // Topo: título + estrela
+    const topo = document.createElement("div");
+    topo.className = "topo";
+    const h4 = document.createElement("h4");
+    h4.textContent = p.titulo;
+    const estrela = document.createElement("button");
+    estrela.className = "btnEstrela" + (p.favorito ? " fav" : "");
+    estrela.textContent = "⭐";
+    estrela.title = p.favorito ? "Remover dos favoritos" : "Marcar como favorito";
+    estrela.addEventListener("click", ()=> alternarFavorito(p, estrela));
+    topo.appendChild(h4);
+    topo.appendChild(estrela);
+    item.appendChild(topo);
+
+    // Etiquetas
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    const cat = document.createElement("span");
+    cat.className = "etiqueta cat";
+    cat.textContent = p.categoria;
+    meta.appendChild(cat);
+    const dest = document.createElement("span");
+    dest.className = "etiqueta";
+    dest.textContent = p.ia_destino || "Genérica";
+    meta.appendChild(dest);
+    if((p.variaveis||[]).length){
+      const v = document.createElement("span");
+      v.className = "etiqueta";
+      v.textContent = "🔤 " + p.variaveis.length + " variável(is)";
+      meta.appendChild(v);
+    }
+    item.appendChild(meta);
+
+    // Corpo (expande/recolhe)
+    const corpo = document.createElement("div");
+    corpo.className = "corpoPrompt";
+    corpo.textContent = p.conteudo;
+    item.appendChild(corpo);
+
+    // Ações
+    const acoes = document.createElement("div");
+    acoes.className = "acoesItem";
+
+    const usar = document.createElement("button");
+    usar.className = "btnUsar";
+    usar.textContent = "📋 Usar";
+    usar.addEventListener("click", ()=> usarPrompt(p));
+    acoes.appendChild(usar);
+
+    const ver = document.createElement("button");
+    ver.className = "btnVer";
+    ver.textContent = "👁 Ver";
+    ver.addEventListener("click", ()=>{
+      item.classList.toggle("aberto");
+      ver.textContent = item.classList.contains("aberto") ? "👁 Ocultar" : "👁 Ver";
+    });
+    acoes.appendChild(ver);
+
+    const excluir = document.createElement("button");
+    excluir.className = "btnExcluir";
+    excluir.textContent = "🗑";
+    excluir.title = "Excluir";
+    excluir.addEventListener("click", ()=> excluirPrompt(p));
+    acoes.appendChild(excluir);
+
+    item.appendChild(acoes);
+    lista.appendChild(item);
+  });
+}
+
+document.getElementById("buscaBiblioteca").addEventListener("input", renderLista);
+
+async function alternarFavorito(p, botao){
+  try{
+    p.favorito = !p.favorito;
+    botao.classList.toggle("fav", p.favorito);
+    await sb(TABELA + "?id=eq." + p.id, {
+      method: "PATCH",
+      body: JSON.stringify({ favorito: p.favorito, atualizado_em: new Date().toISOString() })
+    });
+    toast(p.favorito ? "Adicionado aos favoritos ⭐" : "Removido dos favoritos");
+  } catch(err){
+    p.favorito = !p.favorito;
+    botao.classList.toggle("fav", p.favorito);
+    toast("Erro ao atualizar favorito");
+  }
+}
+
+async function excluirPrompt(p){
+  if(!confirm('Excluir o prompt "' + p.titulo + '"?\nEsta ação não pode ser desfeita.')) return;
+  try{
+    await sb(TABELA + "?id=eq." + p.id, { method: "DELETE" });
+    todosPrompts = todosPrompts.filter(x=>x.id !== p.id);
+    renderLista();
+    toast("Prompt excluído");
+  } catch(err){
+    toast("Erro ao excluir");
+  }
+}
+
+/* ---------- Usar prompt (com variáveis) ---------- */
+let promptEmUso = null;
+
+function usarPrompt(p){
+  const vars = detectarVariaveis(p.conteudo);
+  if(!vars.length){
+    copiarTexto(p.conteudo);
+    return;
+  }
+  promptEmUso = p;
+  const campos = document.getElementById("camposVars");
+  campos.innerHTML = "";
+  vars.forEach(v=>{
+    const div = document.createElement("div");
+    div.className = "campoModal";
+    const label = document.createElement("label");
+    label.textContent = "{" + v + "}";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.dataset.var = v;
+    input.placeholder = "Valor para " + v.toLowerCase().replaceAll("_"," ");
+    div.appendChild(label);
+    div.appendChild(input);
+    campos.appendChild(div);
+  });
+  abrirModal("modalVars");
+}
+
+document.getElementById("btnCopiarPreenchido").addEventListener("click", ()=>{
+  if(!promptEmUso) return;
+  let texto = promptEmUso.conteudo;
+  document.querySelectorAll("#camposVars input").forEach(inp=>{
+    const valor = inp.value.trim();
+    if(valor){
+      texto = texto.split("{" + inp.dataset.var + "}").join(valor);
+    }
+  });
+  copiarTexto(texto);
+  fecharModal("modalVars");
+});
+
 /* ============================================================
    FUNÇÃO CENTRAL: chamar a IA via Cloudflare Worker
    ============================================================ */
 async function chamarIA(sistema, mensagem, maxTokens){
-  if(!CONFIG.WORKER_URL || CONFIG.WORKER_URL.startsWith("COLE")){
-    throw new Error("Worker não configurado. Abra o index.html no GitHub, edite a linha WORKER_URL no bloco CONFIG (topo do arquivo) e cole a URL do seu Cloudflare Worker.");
-  }
   const resp = await fetch(CONFIG.WORKER_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -675,7 +1125,7 @@ async function chamarIA(sistema, mensagem, maxTokens){
     })
   });
   if(!resp.ok){
-    throw new Error("O Worker respondeu com erro " + resp.status + ". Verifique a URL e tente novamente.");
+    throw new Error("O Worker respondeu com erro " + resp.status + ". Tente novamente.");
   }
   const data = await resp.json();
   const texto = (data.content || [])
@@ -686,7 +1136,6 @@ async function chamarIA(sistema, mensagem, maxTokens){
   return texto;
 }
 
-/* Instruções de estilo por IA de destino */
 function estiloDestino(destino){
   switch(destino){
     case "Claude":
@@ -700,14 +1149,13 @@ function estiloDestino(destino){
   }
 }
 
-/* Controle de estado dos botões com spinner */
-function botaoCarregando(btn, carregando, textoOriginal){
+function botaoCarregando(btn, carregando){
   if(carregando){
     btn.dataset.txt = btn.innerHTML;
     btn.innerHTML = '<span class="girando"></span> Gerando…';
     btn.disabled = true;
   } else {
-    btn.innerHTML = btn.dataset.txt || textoOriginal;
+    btn.innerHTML = btn.dataset.txt;
     btn.disabled = false;
   }
 }
@@ -718,7 +1166,6 @@ function mostrarErro(id, msg){
   el.style.display = msg ? "block" : "none";
 }
 
-/* Copiar texto com alternativa para navegadores antigos */
 async function copiarTexto(texto){
   try{
     await navigator.clipboard.writeText(texto);
@@ -774,6 +1221,7 @@ ${perfilGerarLigado ? "- IMPORTANTE: incorpore integralmente ao prompt gerado o 
     ultimoGerado = texto;
     document.getElementById("resGerar").textContent = texto;
     document.getElementById("btnCopiarGerar").disabled = false;
+    document.getElementById("btnSalvarGerar").disabled = false;
     toast("Prompt gerado! ✨");
   } catch(err){
     mostrarErro("erroGerar", err.message);
@@ -784,6 +1232,9 @@ ${perfilGerarLigado ? "- IMPORTANTE: incorpore integralmente ao prompt gerado o 
 
 document.getElementById("btnCopiarGerar").addEventListener("click", ()=>{
   if(ultimoGerado) copiarTexto(ultimoGerado);
+});
+document.getElementById("btnSalvarGerar").addEventListener("click", ()=>{
+  abrirSalvar(ultimoGerado, "ia", document.getElementById("g-destino").value);
 });
 
 /* ============================================================
@@ -813,7 +1264,6 @@ Responda EXATAMENTE neste formato, sem nada antes ou depois:
   try{
     const texto = await chamarIA(sistema, "Prompt a melhorar:\n\n" + original, 3000);
 
-    // Separa o prompt melhorado da explicação
     let melhorado = texto;
     let explicacao = "";
     const m = texto.split("===O QUE FOI MELHORADO===");
@@ -835,6 +1285,7 @@ Responda EXATAMENTE neste formato, sem nada antes ou depois:
       exp.style.display = "none";
     }
     document.getElementById("btnCopiarMelhorar").disabled = false;
+    document.getElementById("btnSalvarMelhorar").disabled = false;
     toast("Prompt aprimorado! 🔧");
   } catch(err){
     mostrarErro("erroMelhorar", err.message);
@@ -845,6 +1296,9 @@ Responda EXATAMENTE neste formato, sem nada antes ou depois:
 
 document.getElementById("btnCopiarMelhorar").addEventListener("click", ()=>{
   if(ultimoMelhorado) copiarTexto(ultimoMelhorado);
+});
+document.getElementById("btnSalvarMelhorar").addEventListener("click", ()=>{
+  abrirSalvar(ultimoMelhorado, "melhorado", document.getElementById("m-destino").value);
 });
 
 /* ============================================================
@@ -891,7 +1345,7 @@ function atualizarPrevia(){
   salvarRascunho();
 }
 
-document.querySelectorAll(".chips").forEach(grupo=>{
+document.querySelectorAll(".chips[data-alvo]").forEach(grupo=>{
   grupo.addEventListener("click", e=>{
     const chip = e.target.closest("button");
     if(!chip) return;
@@ -918,13 +1372,20 @@ chavePerfil.addEventListener("keydown", e=>{
   if(e.key === "Enter" || e.key === " "){ e.preventDefault(); alternarPerfil(); }
 });
 
-document.getElementById("btnCopiar").addEventListener("click", async ()=>{
+document.getElementById("btnCopiar").addEventListener("click", ()=>{
   const texto = montarPrompt();
-  if(!texto){ toast("Preencha ao menos a Tarefa"); return; }
-  if(!document.getElementById("b-tarefa").value.trim()){
+  if(!texto || !document.getElementById("b-tarefa").value.trim()){
     toast("O bloco Tarefa é obrigatório"); return;
   }
   copiarTexto(texto);
+});
+
+document.getElementById("btnSalvarConstrutor").addEventListener("click", ()=>{
+  const texto = montarPrompt();
+  if(!texto || !document.getElementById("b-tarefa").value.trim()){
+    toast("O bloco Tarefa é obrigatório"); return;
+  }
+  abrirSalvar(texto, "construtor", "Genérica");
 });
 
 document.getElementById("btnLimpar").addEventListener("click", ()=>{
