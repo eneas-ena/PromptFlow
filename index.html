@@ -150,7 +150,7 @@ main{
 #btnSair:active{border-color:var(--gold);color:var(--gold-light)}
 
 /* ============================================================
-   CONSTRUTOR GUIADO (Etapa 2)
+   BLOCOS DO CONSTRUTOR
    ============================================================ */
 .bloco{
   background:var(--navy-800);
@@ -177,14 +177,14 @@ main{
   font-family:'Cormorant Garamond',serif;font-style:italic;
   color:var(--cream-dim);font-size:.98rem;margin-bottom:10px;
 }
-.bloco textarea{
+textarea{
   width:100%;min-height:74px;resize:vertical;
   background:var(--navy-700);border:1px solid var(--navy-600);
   border-radius:10px;padding:12px;
   color:var(--cream);font-family:'Inter',sans-serif;font-size:.95rem;
   line-height:1.5;
 }
-.bloco textarea:focus{outline:none;border-color:var(--gold)}
+textarea:focus{outline:none;border-color:var(--gold)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .chips button{
   background:var(--navy-700);border:1px solid var(--navy-600);
@@ -194,7 +194,7 @@ main{
 }
 .chips button:active{border-color:var(--gold);color:var(--gold-light)}
 
-/* Interruptor do perfil teológico */
+/* Interruptor */
 .linhaChave{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   background:var(--navy-800);border:1px solid var(--gold);
@@ -218,7 +218,49 @@ main{
 .chave.ligada{background:var(--gold)}
 .chave.ligada::after{transform:translateX(22px);background:#0d1b2e}
 
-/* Pré-visualização */
+/* Seletores (IA de destino, nível) */
+.linhaSelecao{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.grupoSel{flex:1;min-width:140px}
+.grupoSel label{
+  display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--cream-dim);margin-bottom:6px;
+}
+.grupoSel select{
+  width:100%;padding:12px;border-radius:10px;
+  background:var(--navy-700);border:1px solid var(--navy-600);
+  color:var(--cream);font-family:'Inter',sans-serif;font-size:.92rem;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23c9a227' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+.grupoSel select:focus{outline:none;border-color:var(--gold)}
+
+/* Resultado da IA */
+.resultado{
+  background:#0a1524;border:1px solid var(--gold);
+  border-radius:var(--radius);padding:18px 16px;
+  white-space:pre-wrap;word-wrap:break-word;
+  font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  font-size:.84rem;line-height:1.6;color:var(--cream);
+  min-height:60px;
+}
+.resultado .vazio{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--cream-dim);font-size:1rem;
+}
+.explicacao{
+  background:var(--navy-800);border-left:3px solid var(--gold);
+  border-radius:0 10px 10px 0;
+  padding:14px 16px;margin-top:12px;
+  color:var(--cream-dim);font-size:.88rem;line-height:1.6;
+  white-space:pre-wrap;
+}
+.explicacao strong{
+  display:block;font-family:'Cinzel',serif;font-size:.8rem;
+  letter-spacing:.08em;color:var(--gold-light);margin-bottom:6px;
+}
+
+/* Prévia do Construtor */
 #previa{
   background:#0a1524;border:1px solid var(--gold);
   border-radius:var(--radius);padding:18px 16px;
@@ -227,16 +269,14 @@ main{
   font-size:.84rem;line-height:1.6;color:var(--cream);
   min-height:80px;
 }
+#previa .vazio,
+#contadorPrevia{color:var(--cream-dim)}
 #previa .vazio{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  color:var(--cream-dim);font-size:1rem;
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;
 }
-#contadorPrevia{
-  text-align:right;color:var(--cream-dim);
-  font-size:.75rem;margin-top:6px;
-}
+#contadorPrevia{text-align:right;font-size:.75rem;margin-top:6px}
 
-/* Botões de ação */
+/* Botões */
 .acoes{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
 .btn{
   flex:1;min-width:130px;padding:14px 16px;border-radius:12px;
@@ -249,6 +289,19 @@ main{
 .btn-contorno{background:none;border:1px solid var(--navy-600);color:var(--cream-dim)}
 .btn-contorno:active{border-color:var(--gold);color:var(--gold-light)}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* Spinner de carregamento */
+.girando{
+  width:18px;height:18px;border-radius:50%;
+  border:2px solid rgba(13,27,46,.3);border-top-color:#0d1b2e;
+  animation:girar .7s linear infinite;
+}
+@keyframes girar{to{transform:rotate(360deg)}}
+.msgErro{
+  color:var(--err);font-size:.86rem;margin-top:10px;
+  background:rgba(217,83,79,.08);border:1px solid rgba(217,83,79,.4);
+  border-radius:10px;padding:10px 14px;display:none;
+}
 
 /* Toast */
 #toast{
@@ -265,6 +318,7 @@ main{
 @media (prefers-reduced-motion:reduce){
   .aba{animation:none}
   #toast,.chave,.chave::after{transition:none}
+  .girando{animation-duration:1.4s}
 }
 </style>
 </head>
@@ -282,10 +336,13 @@ const CONFIG = {
   SUPABASE_URL: "https://ghjbljypxksubmcsvaig.supabase.co",
   SUPABASE_ANON_KEY: "COLE_AQUI_SUA_CHAVE_ANON",
 
-  // Etapa 3 - Cloudflare Worker (mesmo do KTL)
+  // >>> ETAPA 3: cole aqui a URL do seu Cloudflare Worker (a mesma do KTL) <<<
   WORKER_URL: "COLE_AQUI_A_URL_DO_SEU_WORKER",
 
-  // Bloco confessional injetado quando o interruptor está ligado
+  // Modelo usado para gerar/melhorar prompts
+  MODELO_IA: "claude-haiku-4-5",
+
+  // Bloco confessional
   PERFIL_TEOLOGICO:
 `PERFIL TEOLÓGICO (obrigatório seguir):
 Adote uma perspectiva evangélica conservadora, de tradição batista. Escatologia amilenista — não utilize leituras dispensacionalistas. Posição continuísta equilibrada quanto aos dons espirituais. Fundamente todas as afirmações na autoridade das Escrituras, com exegese responsável do texto bíblico.`
@@ -319,7 +376,6 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
   <!-- ============ ABA 1: CONSTRUTOR ============ -->
   <section class="aba visivel" id="aba-construtor">
 
-    <!-- Interruptor: perfil teológico -->
     <div class="linhaChave">
       <div class="txt">
         <strong>Perfil Teológico</strong>
@@ -328,7 +384,6 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
       <div class="chave" id="chavePerfil" role="switch" aria-checked="false" tabindex="0"></div>
     </div>
 
-    <!-- BLOCO 1: PAPEL -->
     <div class="bloco">
       <div class="tituloBloco"><h3>1 · Papel</h3><span class="opcional">opcional</span></div>
       <div class="dica">Quem a IA deve ser? Definir um papel especializado melhora muito a qualidade da resposta.</div>
@@ -342,7 +397,6 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
       </div>
     </div>
 
-    <!-- BLOCO 2: CONTEXTO -->
     <div class="bloco">
       <div class="tituloBloco"><h3>2 · Contexto</h3><span class="opcional">opcional</span></div>
       <div class="dica">O que a IA precisa saber antes de agir? Público, situação, material de base, propósito.</div>
@@ -355,7 +409,6 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
       </div>
     </div>
 
-    <!-- BLOCO 3: TAREFA -->
     <div class="bloco">
       <div class="tituloBloco"><h3>3 · Tarefa</h3><span class="obrigatorio">obrigatório</span></div>
       <div class="dica">O que exatamente a IA deve fazer? Use verbos claros: elabore, analise, crie, compare, revise.</div>
@@ -368,7 +421,6 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
       </div>
     </div>
 
-    <!-- BLOCO 4: FORMATO DE SAÍDA -->
     <div class="bloco">
       <div class="tituloBloco"><h3>4 · Formato de Saída</h3><span class="opcional">opcional</span></div>
       <div class="dica">Como a resposta deve ser entregue? Idioma, tom, estrutura, extensão.</div>
@@ -381,7 +433,6 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
       </div>
     </div>
 
-    <!-- BLOCO 5: RESTRIÇÕES -->
     <div class="bloco">
       <div class="tituloBloco"><h3>5 · Restrições</h3><span class="opcional">opcional</span></div>
       <div class="dica">O que a IA NÃO deve fazer? Limites evitam respostas fora do padrão desejado.</div>
@@ -394,14 +445,12 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
       </div>
     </div>
 
-    <!-- BLOCO 6: EXEMPLOS -->
     <div class="bloco">
       <div class="tituloBloco"><h3>6 · Exemplos</h3><span class="opcional">opcional</span></div>
       <div class="dica">Mostrar 1 ou 2 exemplos do resultado esperado (técnica "few-shot") aumenta muito a precisão.</div>
       <textarea id="b-exemplos" placeholder="Ex.: Exemplo do formato esperado: ..."></textarea>
     </div>
 
-    <!-- PRÉ-VISUALIZAÇÃO -->
     <div class="cartao" style="padding:18px 16px">
       <h2>📄 Prompt Montado</h2>
       <div id="previa"><span class="vazio">Preencha os blocos acima e o prompt aparecerá aqui, pronto para copiar…</span></div>
@@ -418,19 +467,89 @@ Adote uma perspectiva evangélica conservadora, de tradição batista. Escatolog
 
   <!-- ============ ABA 2: GERAR COM IA ============ -->
   <section class="aba" id="aba-gerar">
-    <div class="cartao">
-      <h2>✨ Gerar com IA</h2>
-      <p>Descreva sua necessidade em uma frase e receba um prompt completo, adaptado à IA de destino (Claude, ChatGPT, Gemini) — com opção de incluir seu perfil teológico.</p>
-      <span class="selo">Chega na Etapa 3</span>
+
+    <div class="linhaChave">
+      <div class="txt">
+        <strong>Perfil Teológico</strong>
+        <small>O prompt gerado incluirá seu bloco confessional</small>
+      </div>
+      <div class="chave" id="chavePerfilGerar" role="switch" aria-checked="false" tabindex="0"></div>
+    </div>
+
+    <div class="bloco">
+      <div class="tituloBloco"><h3>Descreva sua necessidade</h3><span class="obrigatorio">obrigatório</span></div>
+      <div class="dica">Em uma ou poucas frases, diga o que você quer que a IA faça por você.</div>
+      <textarea id="g-necessidade" style="min-height:110px" placeholder="Ex.: Preciso que a IA analise um salmo no hebraico e gere um estudo devocional com aplicações para a família..."></textarea>
+    </div>
+
+    <div class="linhaSelecao">
+      <div class="grupoSel">
+        <label for="g-destino">IA de destino</label>
+        <select id="g-destino">
+          <option value="Genérica">Genérica (qualquer IA)</option>
+          <option value="Claude">Claude</option>
+          <option value="ChatGPT">ChatGPT</option>
+          <option value="Gemini">Gemini</option>
+        </select>
+      </div>
+      <div class="grupoSel">
+        <label for="g-nivel">Nível do prompt</label>
+        <select id="g-nivel">
+          <option value="Simples">Simples (direto ao ponto)</option>
+          <option value="Avançado">Avançado (estruturado por seções)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="acoes" style="margin-top:0">
+      <button class="btn btn-ouro" id="btnGerar">✨ Gerar Prompt</button>
+    </div>
+    <div class="msgErro" id="erroGerar"></div>
+
+    <div class="cartao" style="padding:18px 16px;margin-top:16px">
+      <h2>📄 Prompt Gerado</h2>
+      <div class="resultado" id="resGerar"><span class="vazio">O prompt gerado pela IA aparecerá aqui…</span></div>
+      <div class="acoes">
+        <button class="btn btn-ouro" id="btnCopiarGerar" disabled>📋 Copiar</button>
+        <button class="btn btn-contorno" disabled title="Disponível na Etapa 4">💾 Salvar (Etapa 4)</button>
+      </div>
     </div>
   </section>
 
   <!-- ============ ABA 3: MELHORAR ============ -->
   <section class="aba" id="aba-melhorar">
-    <div class="cartao">
-      <h2>🔧 Melhorar Prompt</h2>
-      <p>Cole um prompt existente e receba uma versão aprimorada, com explicação do que foi corrigido — perfeito para aprender engenharia de prompts na prática.</p>
-      <span class="selo">Chega na Etapa 3</span>
+
+    <div class="bloco">
+      <div class="tituloBloco"><h3>Cole seu prompt atual</h3><span class="obrigatorio">obrigatório</span></div>
+      <div class="dica">A IA vai aprimorá-lo e explicar o que foi corrigido — assim você aprende engenharia de prompts na prática.</div>
+      <textarea id="m-original" style="min-height:130px" placeholder="Cole aqui o prompt que deseja melhorar..."></textarea>
+    </div>
+
+    <div class="linhaSelecao">
+      <div class="grupoSel">
+        <label for="m-destino">IA de destino</label>
+        <select id="m-destino">
+          <option value="Genérica">Genérica (qualquer IA)</option>
+          <option value="Claude">Claude</option>
+          <option value="ChatGPT">ChatGPT</option>
+          <option value="Gemini">Gemini</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="acoes" style="margin-top:0">
+      <button class="btn btn-ouro" id="btnMelhorar">🔧 Melhorar Prompt</button>
+    </div>
+    <div class="msgErro" id="erroMelhorar"></div>
+
+    <div class="cartao" style="padding:18px 16px;margin-top:16px">
+      <h2>📄 Prompt Melhorado</h2>
+      <div class="resultado" id="resMelhorar"><span class="vazio">A versão aprimorada aparecerá aqui…</span></div>
+      <div class="explicacao" id="expMelhorar" style="display:none"></div>
+      <div class="acoes">
+        <button class="btn btn-ouro" id="btnCopiarMelhorar" disabled>📋 Copiar</button>
+        <button class="btn btn-contorno" disabled title="Disponível na Etapa 4">💾 Salvar (Etapa 4)</button>
+      </div>
     </div>
   </section>
 
@@ -527,7 +646,7 @@ document.querySelectorAll("nav button").forEach(btn=>{
 });
 
 /* ============================================================
-   TOAST (aviso rápido)
+   TOAST
    ============================================================ */
 let toastTimer = null;
 function toast(msg){
@@ -537,6 +656,196 @@ function toast(msg){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=> t.classList.remove("mostrar"), 2200);
 }
+
+/* ============================================================
+   FUNÇÃO CENTRAL: chamar a IA via Cloudflare Worker
+   ============================================================ */
+async function chamarIA(sistema, mensagem, maxTokens){
+  if(!CONFIG.WORKER_URL || CONFIG.WORKER_URL.startsWith("COLE")){
+    throw new Error("Worker não configurado. Abra o index.html no GitHub, edite a linha WORKER_URL no bloco CONFIG (topo do arquivo) e cole a URL do seu Cloudflare Worker.");
+  }
+  const resp = await fetch(CONFIG.WORKER_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: CONFIG.MODELO_IA,
+      max_tokens: maxTokens,
+      system: sistema,
+      messages: [{ role: "user", content: mensagem }]
+    })
+  });
+  if(!resp.ok){
+    throw new Error("O Worker respondeu com erro " + resp.status + ". Verifique a URL e tente novamente.");
+  }
+  const data = await resp.json();
+  const texto = (data.content || [])
+    .map(b => b.text || "")
+    .join("\n")
+    .trim();
+  if(!texto) throw new Error("A IA retornou uma resposta vazia. Tente novamente.");
+  return texto;
+}
+
+/* Instruções de estilo por IA de destino */
+function estiloDestino(destino){
+  switch(destino){
+    case "Claude":
+      return "O prompt será usado no Claude (Anthropic). Estruture com clareza; quando o prompt for avançado, pode usar marcadores de seção em tags simples como <contexto> e <tarefa>, que o Claude interpreta muito bem. Seja direto e dê espaço para raciocínio passo a passo quando útil.";
+    case "ChatGPT":
+      return "O prompt será usado no ChatGPT (OpenAI). Estruture com títulos em Markdown (##) e listas. Comece definindo o papel ('Você é...'). Instruções numeradas funcionam bem.";
+    case "Gemini":
+      return "O prompt será usado no Gemini (Google). Prefira instruções numeradas, objetivas e sequenciais, com o objetivo declarado logo no início. Evite estruturas muito longas.";
+    default:
+      return "O prompt deve funcionar bem em qualquer IA generativa (Claude, ChatGPT, Gemini ou outras). Use estrutura clara com seções em texto simples, sem sintaxes exclusivas de uma plataforma.";
+  }
+}
+
+/* Controle de estado dos botões com spinner */
+function botaoCarregando(btn, carregando, textoOriginal){
+  if(carregando){
+    btn.dataset.txt = btn.innerHTML;
+    btn.innerHTML = '<span class="girando"></span> Gerando…';
+    btn.disabled = true;
+  } else {
+    btn.innerHTML = btn.dataset.txt || textoOriginal;
+    btn.disabled = false;
+  }
+}
+
+function mostrarErro(id, msg){
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = msg ? "block" : "none";
+}
+
+/* Copiar texto com alternativa para navegadores antigos */
+async function copiarTexto(texto){
+  try{
+    await navigator.clipboard.writeText(texto);
+  } catch(e){
+    const ta = document.createElement("textarea");
+    ta.value = texto;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+  }
+  toast("Copiado! ✅");
+}
+
+/* ============================================================
+   ABA GERAR COM IA
+   ============================================================ */
+let perfilGerarLigado = false;
+const chaveGerar = document.getElementById("chavePerfilGerar");
+chaveGerar.addEventListener("click", ()=>{
+  perfilGerarLigado = !perfilGerarLigado;
+  chaveGerar.classList.toggle("ligada", perfilGerarLigado);
+  chaveGerar.setAttribute("aria-checked", perfilGerarLigado);
+});
+
+let ultimoGerado = "";
+
+document.getElementById("btnGerar").addEventListener("click", async ()=>{
+  const necessidade = document.getElementById("g-necessidade").value.trim();
+  if(!necessidade){ toast("Descreva sua necessidade primeiro"); return; }
+
+  const destino = document.getElementById("g-destino").value;
+  const nivel = document.getElementById("g-nivel").value;
+  const btn = document.getElementById("btnGerar");
+  mostrarErro("erroGerar","");
+  botaoCarregando(btn, true);
+
+  const sistema =
+`Você é um engenheiro de prompts sênior, especialista em extrair o máximo das IAs generativas.
+Sua tarefa: a partir da necessidade descrita pelo usuário, escrever um PROMPT PROFISSIONAL pronto para ser copiado e usado.
+
+REGRAS OBRIGATÓRIAS:
+- Responda APENAS com o texto do prompt final. Sem saudações, sem explicações, sem comentários, sem cercas de código (\`\`\`).
+- Escreva o prompt em português do Brasil.
+- ${nivel === "Avançado"
+    ? "Nível AVANÇADO: estruture o prompt em seções claras (papel, contexto, tarefa, formato de saída, restrições). Onde houver informação que o usuário precisará preencher a cada uso (texto bíblico, tema, público etc.), use variáveis em maiúsculas entre chaves, como {TEXTO_BÍBLICO} ou {TEMA}."
+    : "Nível SIMPLES: escreva um prompt direto, em 1 a 3 parágrafos, sem seções, mas cobrindo papel, tarefa e formato desejado de forma natural."}
+- ${estiloDestino(destino)}
+${perfilGerarLigado ? "- IMPORTANTE: incorpore integralmente ao prompt gerado o seguinte bloco confessional, adaptando sua posição na estrutura:\n" + CONFIG.PERFIL_TEOLOGICO : ""}`;
+
+  try{
+    const texto = await chamarIA(sistema, "Necessidade do usuário: " + necessidade, 2000);
+    ultimoGerado = texto;
+    document.getElementById("resGerar").textContent = texto;
+    document.getElementById("btnCopiarGerar").disabled = false;
+    toast("Prompt gerado! ✨");
+  } catch(err){
+    mostrarErro("erroGerar", err.message);
+  } finally {
+    botaoCarregando(btn, false);
+  }
+});
+
+document.getElementById("btnCopiarGerar").addEventListener("click", ()=>{
+  if(ultimoGerado) copiarTexto(ultimoGerado);
+});
+
+/* ============================================================
+   ABA MELHORAR
+   ============================================================ */
+let ultimoMelhorado = "";
+
+document.getElementById("btnMelhorar").addEventListener("click", async ()=>{
+  const original = document.getElementById("m-original").value.trim();
+  if(!original){ toast("Cole um prompt para melhorar"); return; }
+
+  const destino = document.getElementById("m-destino").value;
+  const btn = document.getElementById("btnMelhorar");
+  mostrarErro("erroMelhorar","");
+  botaoCarregando(btn, true);
+
+  const sistema =
+`Você é um engenheiro de prompts sênior. O usuário enviará um prompt existente e você deve aprimorá-lo: torná-lo mais claro, específico, bem estruturado e eficaz, preservando totalmente a intenção original.
+${estiloDestino(destino)}
+
+Responda EXATAMENTE neste formato, sem nada antes ou depois:
+===PROMPT MELHORADO===
+(aqui o prompt aprimorado, em português do Brasil, pronto para copiar, sem cercas de código)
+===O QUE FOI MELHORADO===
+(aqui de 3 a 6 itens curtos, um por linha, começando com "• ", explicando de forma didática o que foi corrigido e por quê)`;
+
+  try{
+    const texto = await chamarIA(sistema, "Prompt a melhorar:\n\n" + original, 3000);
+
+    // Separa o prompt melhorado da explicação
+    let melhorado = texto;
+    let explicacao = "";
+    const m = texto.split("===O QUE FOI MELHORADO===");
+    if(m.length === 2){
+      melhorado = m[0].replace("===PROMPT MELHORADO===","").trim();
+      explicacao = m[1].trim();
+    } else {
+      melhorado = texto.replace("===PROMPT MELHORADO===","").trim();
+    }
+
+    ultimoMelhorado = melhorado;
+    document.getElementById("resMelhorar").textContent = melhorado;
+    const exp = document.getElementById("expMelhorar");
+    if(explicacao){
+      exp.innerHTML = "<strong>O que foi melhorado</strong>";
+      exp.appendChild(document.createTextNode(explicacao));
+      exp.style.display = "block";
+    } else {
+      exp.style.display = "none";
+    }
+    document.getElementById("btnCopiarMelhorar").disabled = false;
+    toast("Prompt aprimorado! 🔧");
+  } catch(err){
+    mostrarErro("erroMelhorar", err.message);
+  } finally {
+    botaoCarregando(btn, false);
+  }
+});
+
+document.getElementById("btnCopiarMelhorar").addEventListener("click", ()=>{
+  if(ultimoMelhorado) copiarTexto(ultimoMelhorado);
+});
 
 /* ============================================================
    CONSTRUTOR GUIADO
@@ -552,16 +861,13 @@ const CAMPOS = [
 
 let perfilLigado = false;
 
-// Monta o prompt final a partir dos blocos preenchidos
 function montarPrompt(){
   const partes = [];
   CAMPOS.forEach(c=>{
     const valor = document.getElementById(c.id).value.trim();
     if(valor) partes.push("# " + c.titulo + "\n" + valor);
-    // Injeta o perfil teológico logo após o CONTEXTO (ou no início, se não houver contexto)
   });
   if(perfilLigado){
-    // Insere o perfil após o bloco de CONTEXTO, se existir; senão, no topo
     const idxContexto = partes.findIndex(p => p.startsWith("# CONTEXTO"));
     const blocoPerfil = "# " + CONFIG.PERFIL_TEOLOGICO;
     if(idxContexto >= 0) partes.splice(idxContexto + 1, 0, blocoPerfil);
@@ -585,7 +891,6 @@ function atualizarPrevia(){
   salvarRascunho();
 }
 
-// Chips: inserem o texto no campo correspondente
 document.querySelectorAll(".chips").forEach(grupo=>{
   grupo.addEventListener("click", e=>{
     const chip = e.target.closest("button");
@@ -597,12 +902,10 @@ document.querySelectorAll(".chips").forEach(grupo=>{
   });
 });
 
-// Atualiza a prévia ao digitar
 CAMPOS.forEach(c=>{
   document.getElementById(c.id).addEventListener("input", atualizarPrevia);
 });
 
-// Interruptor do perfil teológico
 const chavePerfil = document.getElementById("chavePerfil");
 function alternarPerfil(){
   perfilLigado = !perfilLigado;
@@ -615,29 +918,15 @@ chavePerfil.addEventListener("keydown", e=>{
   if(e.key === "Enter" || e.key === " "){ e.preventDefault(); alternarPerfil(); }
 });
 
-// Copiar
 document.getElementById("btnCopiar").addEventListener("click", async ()=>{
   const texto = montarPrompt();
   if(!texto){ toast("Preencha ao menos a Tarefa"); return; }
   if(!document.getElementById("b-tarefa").value.trim()){
     toast("O bloco Tarefa é obrigatório"); return;
   }
-  try{
-    await navigator.clipboard.writeText(texto);
-    toast("Prompt copiado! ✅");
-  } catch(err){
-    // Alternativa para navegadores mais antigos
-    const ta = document.createElement("textarea");
-    ta.value = texto;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand("copy");
-    ta.remove();
-    toast("Prompt copiado! ✅");
-  }
+  copiarTexto(texto);
 });
 
-// Limpar tudo
 document.getElementById("btnLimpar").addEventListener("click", ()=>{
   if(!confirm("Limpar todos os blocos do Construtor?")) return;
   CAMPOS.forEach(c=> document.getElementById(c.id).value = "");
@@ -647,7 +936,6 @@ document.getElementById("btnLimpar").addEventListener("click", ()=>{
 
 /* ============================================================
    RASCUNHO AUTOMÁTICO (localStorage)
-   Nunca perca o trabalho se fechar o app sem querer
    ============================================================ */
 function salvarRascunho(){
   const dados = { perfil: perfilLigado };
