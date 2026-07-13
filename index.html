@@ -21,14 +21,14 @@
    PROMPTFLOW - Identidade visual azul-marinho / dourado
    ============================================================ */
 :root{
-  --navy-900:#0d1b2e;   /* fundo principal */
-  --navy-800:#12233b;   /* cartões */
-  --navy-700:#1a3050;   /* cartões elevados / campos */
-  --navy-600:#24405f;   /* bordas */
-  --gold:#c9a227;       /* dourado principal */
-  --gold-light:#e3c565; /* dourado claro (hover/títulos) */
-  --cream:#f2ead9;      /* texto principal */
-  --cream-dim:#b9b1a0;  /* texto secundário */
+  --navy-900:#0d1b2e;
+  --navy-800:#12233b;
+  --navy-700:#1a3050;
+  --navy-600:#24405f;
+  --gold:#c9a227;
+  --gold-light:#e3c565;
+  --cream:#f2ead9;
+  --cream-dim:#b9b1a0;
   --ok:#4caf7d;
   --err:#d9534f;
   --radius:14px;
@@ -52,25 +52,18 @@ header{
   background:linear-gradient(180deg,#0a1524 0%,var(--navy-900) 100%);
 }
 header h1{
-  font-family:'Cinzel',serif;
-  font-weight:600;
-  font-size:1.55rem;
-  letter-spacing:.14em;
-  color:var(--gold-light);
+  font-family:'Cinzel',serif;font-weight:600;font-size:1.55rem;
+  letter-spacing:.14em;color:var(--gold-light);
 }
 header h1 .flow{color:var(--cream)}
 header p{
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;
-  font-size:1.02rem;
-  color:var(--cream-dim);
-  margin-top:2px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.02rem;color:var(--cream-dim);margin-top:2px;
 }
 
 /* ---------- Tela de PIN ---------- */
 #telaPin{
-  position:fixed;inset:0;z-index:100;
-  background:var(--navy-900);
+  position:fixed;inset:0;z-index:100;background:var(--navy-900);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:22px;padding:24px;text-align:center;
 }
@@ -100,17 +93,15 @@ header p{
 .pinPad button.apagar{font-size:1.2rem;color:var(--cream-dim)}
 #pinErro{color:var(--err);font-size:.9rem;min-height:1.3em}
 
-/* ---------- Navegação por abas ---------- */
+/* ---------- Navegação ---------- */
 nav{
   position:fixed;bottom:0;left:0;right:0;z-index:50;
-  display:flex;
-  background:#0a1524;
+  display:flex;background:#0a1524;
   border-top:1px solid var(--navy-600);
   padding-bottom:env(safe-area-inset-bottom);
 }
 nav button{
-  flex:1;padding:10px 4px 12px;
-  background:none;border:none;cursor:pointer;
+  flex:1;padding:10px 4px 12px;background:none;border:none;cursor:pointer;
   color:var(--cream-dim);font-family:'Inter',sans-serif;font-size:.72rem;
   display:flex;flex-direction:column;align-items:center;gap:3px;
   transition:color .15s;
@@ -131,8 +122,7 @@ main{
   background:var(--navy-800);
   border:1px solid var(--navy-600);
   border-radius:var(--radius);
-  padding:22px 20px;
-  margin-bottom:16px;
+  padding:22px 20px;margin-bottom:16px;
 }
 .cartao h2{
   font-family:'Cinzel',serif;font-weight:600;font-size:1.05rem;
@@ -152,7 +142,6 @@ main{
 }
 .versiculo .ref{font-style:normal;font-size:.85rem;letter-spacing:.06em;color:var(--gold)}
 
-/* Botão sair */
 #btnSair{
   position:absolute;top:calc(env(safe-area-inset-top) + 16px);right:14px;
   background:none;border:1px solid var(--navy-600);border-radius:8px;
@@ -160,19 +149,133 @@ main{
 }
 #btnSair:active{border-color:var(--gold);color:var(--gold-light)}
 
+/* ============================================================
+   CONSTRUTOR GUIADO (Etapa 2)
+   ============================================================ */
+.bloco{
+  background:var(--navy-800);
+  border:1px solid var(--navy-600);
+  border-radius:var(--radius);
+  padding:18px 16px;margin-bottom:14px;
+}
+.bloco .tituloBloco{
+  display:flex;align-items:baseline;gap:8px;margin-bottom:4px;
+}
+.bloco .tituloBloco h3{
+  font-family:'Cinzel',serif;font-weight:600;font-size:.95rem;
+  letter-spacing:.07em;color:var(--gold-light);
+}
+.bloco .tituloBloco .opcional{
+  font-size:.68rem;color:var(--cream-dim);
+  border:1px solid var(--navy-600);border-radius:999px;padding:1px 8px;
+}
+.bloco .tituloBloco .obrigatorio{
+  font-size:.68rem;color:var(--gold);
+  border:1px solid var(--gold);border-radius:999px;padding:1px 8px;
+}
+.bloco .dica{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--cream-dim);font-size:.98rem;margin-bottom:10px;
+}
+.bloco textarea{
+  width:100%;min-height:74px;resize:vertical;
+  background:var(--navy-700);border:1px solid var(--navy-600);
+  border-radius:10px;padding:12px;
+  color:var(--cream);font-family:'Inter',sans-serif;font-size:.95rem;
+  line-height:1.5;
+}
+.bloco textarea:focus{outline:none;border-color:var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chips button{
+  background:var(--navy-700);border:1px solid var(--navy-600);
+  border-radius:999px;padding:6px 12px;cursor:pointer;
+  color:var(--cream-dim);font-size:.78rem;font-family:'Inter',sans-serif;
+  transition:border-color .15s,color .15s;text-align:left;
+}
+.chips button:active{border-color:var(--gold);color:var(--gold-light)}
+
+/* Interruptor do perfil teológico */
+.linhaChave{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:var(--navy-800);border:1px solid var(--gold);
+  border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;
+}
+.linhaChave .txt strong{
+  font-family:'Cinzel',serif;font-size:.88rem;letter-spacing:.05em;
+  color:var(--gold-light);display:block;
+}
+.linhaChave .txt small{color:var(--cream-dim);font-size:.78rem}
+.chave{
+  position:relative;width:52px;height:30px;flex-shrink:0;
+  background:var(--navy-700);border:1px solid var(--navy-600);
+  border-radius:999px;cursor:pointer;transition:background .2s;
+}
+.chave::after{
+  content:"";position:absolute;top:3px;left:3px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--cream-dim);transition:transform .2s,background .2s;
+}
+.chave.ligada{background:var(--gold)}
+.chave.ligada::after{transform:translateX(22px);background:#0d1b2e}
+
+/* Pré-visualização */
+#previa{
+  background:#0a1524;border:1px solid var(--gold);
+  border-radius:var(--radius);padding:18px 16px;
+  white-space:pre-wrap;word-wrap:break-word;
+  font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  font-size:.84rem;line-height:1.6;color:var(--cream);
+  min-height:80px;
+}
+#previa .vazio{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--cream-dim);font-size:1rem;
+}
+#contadorPrevia{
+  text-align:right;color:var(--cream-dim);
+  font-size:.75rem;margin-top:6px;
+}
+
+/* Botões de ação */
+.acoes{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{
+  flex:1;min-width:130px;padding:14px 16px;border-radius:12px;
+  font-family:'Inter',sans-serif;font-size:.92rem;font-weight:600;
+  cursor:pointer;transition:opacity .15s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn:active{opacity:.8}
+.btn-ouro{background:var(--gold);border:none;color:#0d1b2e}
+.btn-contorno{background:none;border:1px solid var(--navy-600);color:var(--cream-dim)}
+.btn-contorno:active{border-color:var(--gold);color:var(--gold-light)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* Toast */
+#toast{
+  position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));
+  transform:translateX(-50%) translateY(20px);
+  background:var(--gold);color:#0d1b2e;
+  font-weight:600;font-size:.9rem;
+  padding:12px 22px;border-radius:999px;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+  z-index:80;white-space:nowrap;
+}
+#toast.mostrar{opacity:1;transform:translateX(-50%) translateY(0)}
+
 @media (prefers-reduced-motion:reduce){
   .aba{animation:none}
+  #toast,.chave,.chave::after{transition:none}
 }
 </style>
 </head>
 <body>
 
 <!-- ============================================================
-     CONFIGURAÇÕES - preencha nas próximas etapas
+     CONFIGURAÇÕES
      ============================================================ -->
 <script>
 const CONFIG = {
-  // Hash SHA-256 do PIN. Padrão: 1010 (veja instruções para trocar)
+  // Hash SHA-256 do PIN. Padrão: 1010
   PIN_HASH: "7a5df5ffa0dec2228d90b8d0a0f1b0767b748b0a41314c123075b8289e4e053f",
 
   // Etapa 4 - Supabase (mesmo projeto dos seus outros apps)
@@ -180,7 +283,12 @@ const CONFIG = {
   SUPABASE_ANON_KEY: "COLE_AQUI_SUA_CHAVE_ANON",
 
   // Etapa 3 - Cloudflare Worker (mesmo do KTL)
-  WORKER_URL: "COLE_AQUI_A_URL_DO_SEU_WORKER"
+  WORKER_URL: "COLE_AQUI_A_URL_DO_SEU_WORKER",
+
+  // Bloco confessional injetado quando o interruptor está ligado
+  PERFIL_TEOLOGICO:
+`PERFIL TEOLÓGICO (obrigatório seguir):
+Adote uma perspectiva evangélica conservadora, de tradição batista. Escatologia amilenista — não utilize leituras dispensacionalistas. Posição continuísta equilibrada quanto aos dons espirituais. Fundamente todas as afirmações na autoridade das Escrituras, com exegese responsável do texto bíblico.`
 };
 </script>
 
@@ -208,16 +316,107 @@ const CONFIG = {
 </header>
 
 <main>
-  <!-- ABA 1: CONSTRUTOR -->
+  <!-- ============ ABA 1: CONSTRUTOR ============ -->
   <section class="aba visivel" id="aba-construtor">
-    <div class="cartao">
-      <h2>🧱 Construtor Guiado</h2>
-      <p>Monte prompts profissionais por blocos: Papel, Contexto, Tarefa, Formato de saída, Restrições e Exemplos. Funciona sem internet e sem custo de API.</p>
-      <span class="selo">Chega na Etapa 2</span>
+
+    <!-- Interruptor: perfil teológico -->
+    <div class="linhaChave">
+      <div class="txt">
+        <strong>Perfil Teológico</strong>
+        <small>Inclui seu bloco confessional (batista, amilenista, continuísta equilibrado)</small>
+      </div>
+      <div class="chave" id="chavePerfil" role="switch" aria-checked="false" tabindex="0"></div>
+    </div>
+
+    <!-- BLOCO 1: PAPEL -->
+    <div class="bloco">
+      <div class="tituloBloco"><h3>1 · Papel</h3><span class="opcional">opcional</span></div>
+      <div class="dica">Quem a IA deve ser? Definir um papel especializado melhora muito a qualidade da resposta.</div>
+      <textarea id="b-papel" placeholder="Ex.: Você é um teólogo especialista em exegese bíblica..."></textarea>
+      <div class="chips" data-alvo="b-papel">
+        <button>Você é um teólogo especialista em exegese bíblica, com domínio de hebraico e grego.</button>
+        <button>Você é um professor de homilética experiente, focado em pregação expositiva.</button>
+        <button>Você é um redator especializado em conteúdo cristão devocional.</button>
+        <button>Você é um desenvolvedor sênior especializado em apps web (HTML, JS, Supabase).</button>
+        <button>Você é um engenheiro de prompts especialista em IAs generativas.</button>
+      </div>
+    </div>
+
+    <!-- BLOCO 2: CONTEXTO -->
+    <div class="bloco">
+      <div class="tituloBloco"><h3>2 · Contexto</h3><span class="opcional">opcional</span></div>
+      <div class="dica">O que a IA precisa saber antes de agir? Público, situação, material de base, propósito.</div>
+      <textarea id="b-contexto" placeholder="Ex.: O público-alvo são membros de igreja evangélica..."></textarea>
+      <div class="chips" data-alvo="b-contexto">
+        <button>O público-alvo é formado por membros de igreja evangélica, de idades e níveis de instrução variados.</button>
+        <button>O material será usado em aula de curso teológico de nível básico.</button>
+        <button>Este conteúdo faz parte de uma série de sermões expositivos em andamento.</button>
+        <button>O app é de arquivo único (HTML/JS), hospedado no GitHub Pages, com banco Supabase.</button>
+      </div>
+    </div>
+
+    <!-- BLOCO 3: TAREFA -->
+    <div class="bloco">
+      <div class="tituloBloco"><h3>3 · Tarefa</h3><span class="obrigatorio">obrigatório</span></div>
+      <div class="dica">O que exatamente a IA deve fazer? Use verbos claros: elabore, analise, crie, compare, revise.</div>
+      <textarea id="b-tarefa" placeholder="Ex.: Elabore um esboço de sermão expositivo com 4 pontos..."></textarea>
+      <div class="chips" data-alvo="b-tarefa">
+        <button>Elabore um esboço de sermão expositivo com 4 pontos sobre o texto bíblico indicado.</button>
+        <button>Crie um estudo bíblico com 3 pontos, perguntas para discussão e aplicação prática.</button>
+        <button>Analise o texto no idioma original e destaque os termos-chave com seu significado.</button>
+        <button>Revise o texto a seguir corrigindo gramática e melhorando a clareza, sem alterar o sentido.</button>
+      </div>
+    </div>
+
+    <!-- BLOCO 4: FORMATO DE SAÍDA -->
+    <div class="bloco">
+      <div class="tituloBloco"><h3>4 · Formato de Saída</h3><span class="opcional">opcional</span></div>
+      <div class="dica">Como a resposta deve ser entregue? Idioma, tom, estrutura, extensão.</div>
+      <textarea id="b-formato" placeholder="Ex.: Responda em português do Brasil, em tom pastoral..."></textarea>
+      <div class="chips" data-alvo="b-formato">
+        <button>Responda em português do Brasil, em tom pastoral e acessível.</button>
+        <button>Use títulos e subtítulos claros, com parágrafos curtos.</button>
+        <button>Extensão: entre 800 e 1000 palavras por ponto.</button>
+        <button>Responda apenas com JSON válido, sem nenhum texto adicional.</button>
+      </div>
+    </div>
+
+    <!-- BLOCO 5: RESTRIÇÕES -->
+    <div class="bloco">
+      <div class="tituloBloco"><h3>5 · Restrições</h3><span class="opcional">opcional</span></div>
+      <div class="dica">O que a IA NÃO deve fazer? Limites evitam respostas fora do padrão desejado.</div>
+      <textarea id="b-restricoes" placeholder="Ex.: Não use linguagem sensacionalista..."></textarea>
+      <div class="chips" data-alvo="b-restricoes">
+        <button>Não use linguagem sensacionalista nem especulações sem base no texto bíblico.</button>
+        <button>Coloque as citações bíblicas entre chaves { } no padrão dos meus materiais.</button>
+        <button>Evite jargões técnicos sem explicação para o leitor comum.</button>
+        <button>Não invente referências, fontes ou citações de autores.</button>
+      </div>
+    </div>
+
+    <!-- BLOCO 6: EXEMPLOS -->
+    <div class="bloco">
+      <div class="tituloBloco"><h3>6 · Exemplos</h3><span class="opcional">opcional</span></div>
+      <div class="dica">Mostrar 1 ou 2 exemplos do resultado esperado (técnica "few-shot") aumenta muito a precisão.</div>
+      <textarea id="b-exemplos" placeholder="Ex.: Exemplo do formato esperado: ..."></textarea>
+    </div>
+
+    <!-- PRÉ-VISUALIZAÇÃO -->
+    <div class="cartao" style="padding:18px 16px">
+      <h2>📄 Prompt Montado</h2>
+      <div id="previa"><span class="vazio">Preencha os blocos acima e o prompt aparecerá aqui, pronto para copiar…</span></div>
+      <div id="contadorPrevia"></div>
+      <div class="acoes">
+        <button class="btn btn-ouro" id="btnCopiar">📋 Copiar Prompt</button>
+        <button class="btn btn-contorno" id="btnLimpar">🗑 Limpar Tudo</button>
+      </div>
+      <div class="acoes">
+        <button class="btn btn-contorno" disabled title="Disponível na Etapa 4">💾 Salvar na Biblioteca (Etapa 4)</button>
+      </div>
     </div>
   </section>
 
-  <!-- ABA 2: GERAR COM IA -->
+  <!-- ============ ABA 2: GERAR COM IA ============ -->
   <section class="aba" id="aba-gerar">
     <div class="cartao">
       <h2>✨ Gerar com IA</h2>
@@ -226,7 +425,7 @@ const CONFIG = {
     </div>
   </section>
 
-  <!-- ABA 3: MELHORAR -->
+  <!-- ============ ABA 3: MELHORAR ============ -->
   <section class="aba" id="aba-melhorar">
     <div class="cartao">
       <h2>🔧 Melhorar Prompt</h2>
@@ -235,7 +434,7 @@ const CONFIG = {
     </div>
   </section>
 
-  <!-- ABA 4: BIBLIOTECA -->
+  <!-- ============ ABA 4: BIBLIOTECA ============ -->
   <section class="aba" id="aba-biblioteca">
     <div class="cartao">
       <h2>📚 Biblioteca</h2>
@@ -256,6 +455,8 @@ const CONFIG = {
   <button data-aba="melhorar"><span class="ico">🔧</span>Melhorar</button>
   <button data-aba="biblioteca"><span class="ico">📚</span>Biblioteca</button>
 </nav>
+
+<div id="toast"></div>
 
 <script>
 /* ============================================================
@@ -301,7 +502,6 @@ document.getElementById("pinPad").addEventListener("click", e=>{
   if(pinDigitado.length === 4) verificarPin();
 });
 
-// Mantém sessão até fechar o app/aba
 if(sessionStorage.getItem("pf_sessao") === "ok"){
   document.getElementById("telaPin").style.display = "none";
 }
@@ -325,6 +525,151 @@ document.querySelectorAll("nav button").forEach(btn=>{
     window.scrollTo({top:0});
   });
 });
+
+/* ============================================================
+   TOAST (aviso rápido)
+   ============================================================ */
+let toastTimer = null;
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("mostrar");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove("mostrar"), 2200);
+}
+
+/* ============================================================
+   CONSTRUTOR GUIADO
+   ============================================================ */
+const CAMPOS = [
+  {id:"b-papel",     titulo:"PAPEL"},
+  {id:"b-contexto",  titulo:"CONTEXTO"},
+  {id:"b-tarefa",    titulo:"TAREFA"},
+  {id:"b-formato",   titulo:"FORMATO DE SAÍDA"},
+  {id:"b-restricoes",titulo:"RESTRIÇÕES"},
+  {id:"b-exemplos",  titulo:"EXEMPLOS"}
+];
+
+let perfilLigado = false;
+
+// Monta o prompt final a partir dos blocos preenchidos
+function montarPrompt(){
+  const partes = [];
+  CAMPOS.forEach(c=>{
+    const valor = document.getElementById(c.id).value.trim();
+    if(valor) partes.push("# " + c.titulo + "\n" + valor);
+    // Injeta o perfil teológico logo após o CONTEXTO (ou no início, se não houver contexto)
+  });
+  if(perfilLigado){
+    // Insere o perfil após o bloco de CONTEXTO, se existir; senão, no topo
+    const idxContexto = partes.findIndex(p => p.startsWith("# CONTEXTO"));
+    const blocoPerfil = "# " + CONFIG.PERFIL_TEOLOGICO;
+    if(idxContexto >= 0) partes.splice(idxContexto + 1, 0, blocoPerfil);
+    else partes.unshift(blocoPerfil);
+  }
+  return partes.join("\n\n");
+}
+
+function atualizarPrevia(){
+  const previa = document.getElementById("previa");
+  const contador = document.getElementById("contadorPrevia");
+  const texto = montarPrompt();
+  if(texto){
+    previa.textContent = texto;
+    const palavras = texto.split(/\s+/).filter(Boolean).length;
+    contador.textContent = texto.length + " caracteres · " + palavras + " palavras";
+  } else {
+    previa.innerHTML = '<span class="vazio">Preencha os blocos acima e o prompt aparecerá aqui, pronto para copiar…</span>';
+    contador.textContent = "";
+  }
+  salvarRascunho();
+}
+
+// Chips: inserem o texto no campo correspondente
+document.querySelectorAll(".chips").forEach(grupo=>{
+  grupo.addEventListener("click", e=>{
+    const chip = e.target.closest("button");
+    if(!chip) return;
+    const campo = document.getElementById(grupo.dataset.alvo);
+    const atual = campo.value.trim();
+    campo.value = atual ? atual + "\n" + chip.textContent : chip.textContent;
+    atualizarPrevia();
+  });
+});
+
+// Atualiza a prévia ao digitar
+CAMPOS.forEach(c=>{
+  document.getElementById(c.id).addEventListener("input", atualizarPrevia);
+});
+
+// Interruptor do perfil teológico
+const chavePerfil = document.getElementById("chavePerfil");
+function alternarPerfil(){
+  perfilLigado = !perfilLigado;
+  chavePerfil.classList.toggle("ligada", perfilLigado);
+  chavePerfil.setAttribute("aria-checked", perfilLigado);
+  atualizarPrevia();
+}
+chavePerfil.addEventListener("click", alternarPerfil);
+chavePerfil.addEventListener("keydown", e=>{
+  if(e.key === "Enter" || e.key === " "){ e.preventDefault(); alternarPerfil(); }
+});
+
+// Copiar
+document.getElementById("btnCopiar").addEventListener("click", async ()=>{
+  const texto = montarPrompt();
+  if(!texto){ toast("Preencha ao menos a Tarefa"); return; }
+  if(!document.getElementById("b-tarefa").value.trim()){
+    toast("O bloco Tarefa é obrigatório"); return;
+  }
+  try{
+    await navigator.clipboard.writeText(texto);
+    toast("Prompt copiado! ✅");
+  } catch(err){
+    // Alternativa para navegadores mais antigos
+    const ta = document.createElement("textarea");
+    ta.value = texto;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    toast("Prompt copiado! ✅");
+  }
+});
+
+// Limpar tudo
+document.getElementById("btnLimpar").addEventListener("click", ()=>{
+  if(!confirm("Limpar todos os blocos do Construtor?")) return;
+  CAMPOS.forEach(c=> document.getElementById(c.id).value = "");
+  if(perfilLigado) alternarPerfil(); else atualizarPrevia();
+  toast("Blocos limpos");
+});
+
+/* ============================================================
+   RASCUNHO AUTOMÁTICO (localStorage)
+   Nunca perca o trabalho se fechar o app sem querer
+   ============================================================ */
+function salvarRascunho(){
+  const dados = { perfil: perfilLigado };
+  CAMPOS.forEach(c=> dados[c.id] = document.getElementById(c.id).value);
+  localStorage.setItem("pf_rascunho", JSON.stringify(dados));
+}
+
+function carregarRascunho(){
+  try{
+    const salvo = localStorage.getItem("pf_rascunho");
+    if(!salvo) return;
+    const dados = JSON.parse(salvo);
+    CAMPOS.forEach(c=>{
+      if(dados[c.id]) document.getElementById(c.id).value = dados[c.id];
+    });
+    if(dados.perfil) alternarPerfil();
+    else atualizarPrevia();
+  } catch(e){ /* rascunho inválido: ignora */ }
+}
+
+carregarRascunho();
+atualizarPrevia();
 </script>
 </body>
 </html>
