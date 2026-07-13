@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PromptFlow</title>
+
+<!-- PWA / iPhone -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PromptFlow">
+<meta name="theme-color" content="#0d1b2e">
+
+<!-- Fontes da identidade visual -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   PROMPTFLOW - Identidade visual azul-marinho / dourado
+   ============================================================ */
+:root{
+  --navy-900:#0d1b2e;   /* fundo principal */
+  --navy-800:#12233b;   /* cartões */
+  --navy-700:#1a3050;   /* cartões elevados / campos */
+  --navy-600:#24405f;   /* bordas */
+  --gold:#c9a227;       /* dourado principal */
+  --gold-light:#e3c565; /* dourado claro (hover/títulos) */
+  --cream:#f2ead9;      /* texto principal */
+  --cream-dim:#b9b1a0;  /* texto secundário */
+  --ok:#4caf7d;
+  --err:#d9534f;
+  --radius:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--navy-900);
+  color:var(--cream);
+  font-family:'Inter',sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  min-height:100dvh;
+}
+
+/* ---------- Cabeçalho ---------- */
+header{
+  padding:calc(env(safe-area-inset-top) + 18px) 20px 14px;
+  text-align:center;
+  border-bottom:1px solid var(--navy-600);
+  background:linear-gradient(180deg,#0a1524 0%,var(--navy-900) 100%);
+}
+header h1{
+  font-family:'Cinzel',serif;
+  font-weight:600;
+  font-size:1.55rem;
+  letter-spacing:.14em;
+  color:var(--gold-light);
+}
+header h1 .flow{color:var(--cream)}
+header p{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:1.02rem;
+  color:var(--cream-dim);
+  margin-top:2px;
+}
+
+/* ---------- Tela de PIN ---------- */
+#telaPin{
+  position:fixed;inset:0;z-index:100;
+  background:var(--navy-900);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:22px;padding:24px;text-align:center;
+}
+#telaPin .logoPin{
+  font-family:'Cinzel',serif;font-weight:700;font-size:2rem;
+  letter-spacing:.16em;color:var(--gold-light);
+}
+#telaPin .logoPin .flow{color:var(--cream)}
+#telaPin .subPin{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--cream-dim);font-size:1.1rem;margin-top:-14px;
+}
+.pinDots{display:flex;gap:16px;margin:6px 0}
+.pinDots span{
+  width:16px;height:16px;border-radius:50%;
+  border:2px solid var(--gold);transition:background .15s;
+}
+.pinDots span.cheio{background:var(--gold)}
+.pinPad{display:grid;grid-template-columns:repeat(3,72px);gap:14px}
+.pinPad button{
+  height:72px;border-radius:50%;
+  background:var(--navy-800);border:1px solid var(--navy-600);
+  color:var(--cream);font-size:1.5rem;font-family:'Inter',sans-serif;
+  cursor:pointer;transition:background .15s,border-color .15s;
+}
+.pinPad button:active{background:var(--navy-700);border-color:var(--gold)}
+.pinPad button.apagar{font-size:1.2rem;color:var(--cream-dim)}
+#pinErro{color:var(--err);font-size:.9rem;min-height:1.3em}
+
+/* ---------- Navegação por abas ---------- */
+nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:50;
+  display:flex;
+  background:#0a1524;
+  border-top:1px solid var(--navy-600);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+nav button{
+  flex:1;padding:10px 4px 12px;
+  background:none;border:none;cursor:pointer;
+  color:var(--cream-dim);font-family:'Inter',sans-serif;font-size:.72rem;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  transition:color .15s;
+}
+nav button .ico{font-size:1.35rem;line-height:1}
+nav button.ativa{color:var(--gold-light)}
+
+/* ---------- Conteúdo ---------- */
+main{
+  padding:22px 18px calc(90px + env(safe-area-inset-bottom));
+  max-width:760px;margin:0 auto;
+}
+.aba{display:none;animation:surgir .25s ease}
+.aba.visivel{display:block}
+@keyframes surgir{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.cartao{
+  background:var(--navy-800);
+  border:1px solid var(--navy-600);
+  border-radius:var(--radius);
+  padding:22px 20px;
+  margin-bottom:16px;
+}
+.cartao h2{
+  font-family:'Cinzel',serif;font-weight:600;font-size:1.05rem;
+  letter-spacing:.08em;color:var(--gold-light);margin-bottom:10px;
+}
+.cartao p{color:var(--cream-dim);font-size:.95rem}
+.selo{
+  display:inline-block;margin-top:14px;
+  font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);border:1px solid var(--gold);
+  border-radius:999px;padding:4px 12px;
+}
+.versiculo{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  text-align:center;color:var(--cream-dim);
+  font-size:1.05rem;margin:26px 12px 6px;
+}
+.versiculo .ref{font-style:normal;font-size:.85rem;letter-spacing:.06em;color:var(--gold)}
+
+/* Botão sair */
+#btnSair{
+  position:absolute;top:calc(env(safe-area-inset-top) + 16px);right:14px;
+  background:none;border:1px solid var(--navy-600);border-radius:8px;
+  color:var(--cream-dim);font-size:.72rem;padding:5px 10px;cursor:pointer;
+}
+#btnSair:active{border-color:var(--gold);color:var(--gold-light)}
+
+@media (prefers-reduced-motion:reduce){
+  .aba{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     CONFIGURAÇÕES - preencha nas próximas etapas
+     ============================================================ -->
+<script>
+const CONFIG = {
+  // Hash SHA-256 do PIN. Padrão: 1010 (veja instruções para trocar)
+  PIN_HASH: "7a5df5ffa0dec2228d90b8d0a0f1b0767b748b0a41314c123075b8289e4e053f",
+
+  // Etapa 4 - Supabase (mesmo projeto dos seus outros apps)
+  SUPABASE_URL: "https://ghjbljypxksubmcsvaig.supabase.co",
+  SUPABASE_ANON_KEY: "COLE_AQUI_SUA_CHAVE_ANON",
+
+  // Etapa 3 - Cloudflare Worker (mesmo do KTL)
+  WORKER_URL: "COLE_AQUI_A_URL_DO_SEU_WORKER"
+};
+</script>
+
+<!-- ---------- TELA DE PIN ---------- -->
+<div id="telaPin">
+  <div class="logoPin">PROMPT<span class="flow">FLOW</span></div>
+  <div class="subPin">Engenharia de prompts ao seu alcance</div>
+  <div class="pinDots" id="pinDots">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="pinPad" id="pinPad">
+    <button>1</button><button>2</button><button>3</button>
+    <button>4</button><button>5</button><button>6</button>
+    <button>7</button><button>8</button><button>9</button>
+    <span></span><button>0</button><button class="apagar">⌫</button>
+  </div>
+  <div id="pinErro"></div>
+</div>
+
+<!-- ---------- APP ---------- -->
+<header>
+  <h1>PROMPT<span class="flow">FLOW</span></h1>
+  <p>Engenharia de prompts ao seu alcance</p>
+  <button id="btnSair" onclick="sair()">Sair</button>
+</header>
+
+<main>
+  <!-- ABA 1: CONSTRUTOR -->
+  <section class="aba visivel" id="aba-construtor">
+    <div class="cartao">
+      <h2>🧱 Construtor Guiado</h2>
+      <p>Monte prompts profissionais por blocos: Papel, Contexto, Tarefa, Formato de saída, Restrições e Exemplos. Funciona sem internet e sem custo de API.</p>
+      <span class="selo">Chega na Etapa 2</span>
+    </div>
+  </section>
+
+  <!-- ABA 2: GERAR COM IA -->
+  <section class="aba" id="aba-gerar">
+    <div class="cartao">
+      <h2>✨ Gerar com IA</h2>
+      <p>Descreva sua necessidade em uma frase e receba um prompt completo, adaptado à IA de destino (Claude, ChatGPT, Gemini) — com opção de incluir seu perfil teológico.</p>
+      <span class="selo">Chega na Etapa 3</span>
+    </div>
+  </section>
+
+  <!-- ABA 3: MELHORAR -->
+  <section class="aba" id="aba-melhorar">
+    <div class="cartao">
+      <h2>🔧 Melhorar Prompt</h2>
+      <p>Cole um prompt existente e receba uma versão aprimorada, com explicação do que foi corrigido — perfeito para aprender engenharia de prompts na prática.</p>
+      <span class="selo">Chega na Etapa 3</span>
+    </div>
+  </section>
+
+  <!-- ABA 4: BIBLIOTECA -->
+  <section class="aba" id="aba-biblioteca">
+    <div class="cartao">
+      <h2>📚 Biblioteca</h2>
+      <p>Seus prompts salvos no Supabase, organizados por categoria (Homilética, Teologia, Estudos, Apps, Igreja, Pessoal), com favoritos, busca e variáveis reutilizáveis.</p>
+      <span class="selo">Chega na Etapa 4</span>
+    </div>
+  </section>
+
+  <div class="versiculo">
+    “Tudo, porém, seja feito com decência e ordem.”<br>
+    <span class="ref">1 Coríntios 14.40</span>
+  </div>
+</main>
+
+<nav>
+  <button class="ativa" data-aba="construtor"><span class="ico">🧱</span>Construtor</button>
+  <button data-aba="gerar"><span class="ico">✨</span>Gerar IA</button>
+  <button data-aba="melhorar"><span class="ico">🔧</span>Melhorar</button>
+  <button data-aba="biblioteca"><span class="ico">📚</span>Biblioteca</button>
+</nav>
+
+<script>
+/* ============================================================
+   AUTENTICAÇÃO POR PIN (SHA-256)
+   ============================================================ */
+let pinDigitado = "";
+
+async function sha256(texto){
+  const dados = new TextEncoder().encode(texto);
+  const hash = await crypto.subtle.digest("SHA-256", dados);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2,"0")).join("");
+}
+
+function desenharDots(){
+  document.querySelectorAll("#pinDots span").forEach((d,i)=>{
+    d.classList.toggle("cheio", i < pinDigitado.length);
+  });
+}
+
+async function verificarPin(){
+  const hash = await sha256(pinDigitado);
+  if(hash === CONFIG.PIN_HASH){
+    sessionStorage.setItem("pf_sessao","ok");
+    document.getElementById("telaPin").style.display = "none";
+  } else {
+    document.getElementById("pinErro").textContent = "PIN incorreto. Tente novamente.";
+    pinDigitado = "";
+    desenharDots();
+  }
+}
+
+document.getElementById("pinPad").addEventListener("click", e=>{
+  const btn = e.target.closest("button");
+  if(!btn) return;
+  document.getElementById("pinErro").textContent = "";
+  if(btn.classList.contains("apagar")){
+    pinDigitado = pinDigitado.slice(0,-1);
+  } else if(pinDigitado.length < 4){
+    pinDigitado += btn.textContent.trim();
+  }
+  desenharDots();
+  if(pinDigitado.length === 4) verificarPin();
+});
+
+// Mantém sessão até fechar o app/aba
+if(sessionStorage.getItem("pf_sessao") === "ok"){
+  document.getElementById("telaPin").style.display = "none";
+}
+
+function sair(){
+  sessionStorage.removeItem("pf_sessao");
+  pinDigitado = "";
+  desenharDots();
+  document.getElementById("telaPin").style.display = "flex";
+}
+
+/* ============================================================
+   NAVEGAÇÃO ENTRE ABAS
+   ============================================================ */
+document.querySelectorAll("nav button").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll("nav button").forEach(b=>b.classList.remove("ativa"));
+    btn.classList.add("ativa");
+    document.querySelectorAll(".aba").forEach(a=>a.classList.remove("visivel"));
+    document.getElementById("aba-" + btn.dataset.aba).classList.add("visivel");
+    window.scrollTo({top:0});
+  });
+});
+</script>
+</body>
+</html>
