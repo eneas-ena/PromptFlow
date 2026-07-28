@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ANAGNOSIS — Gerador de Lemas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F1B33; --navy-2:#0E1A2F; --navy-3:#16243F;
+  --gold:#C9A227; --gold-dim:#8f7420;
+  --ink:#EAE6DA; --ink-dim:#9AA3B2;
+  --ok:#4E9A6B; --erro:#B4544E; --linha:rgba(201,162,39,.22);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; padding:28px 18px 60px;
+  background:var(--navy); color:var(--ink);
+  font-family:'Cormorant Garamond',Georgia,serif; font-size:18px; line-height:1.6;
+}
+.wrap{max-width:940px;margin:0 auto}
+h1{font-family:'Cinzel',serif;font-size:26px;font-weight:600;color:var(--gold);letter-spacing:.06em;margin:0 0 4px}
+.sub{color:var(--ink-dim);font-size:16px;margin:0 0 26px;font-style:italic}
+h2{font-family:'Cinzel',serif;font-size:15px;font-weight:600;color:var(--gold);letter-spacing:.09em;text-transform:uppercase;margin:0 0 14px}
+.card{background:var(--navy-2);border:1px solid var(--linha);border-radius:10px;padding:20px 22px;margin-bottom:18px}
+label{display:block;font-size:14px;color:var(--ink-dim);letter-spacing:.04em;margin:0 0 5px;font-family:'Cinzel',serif}
+input,select{
+  width:100%;padding:9px 11px;background:var(--navy-3);color:var(--ink);
+  border:1px solid var(--linha);border-radius:6px;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
+}
+input:focus,select:focus{outline:none;border-color:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px}
+button{
+  font-family:'Cinzel',serif;font-size:14px;letter-spacing:.07em;
+  padding:11px 22px;border-radius:6px;cursor:pointer;
+  background:transparent;color:var(--gold);border:1px solid var(--gold);
+  transition:background .15s;
+}
+button:hover:not(:disabled){background:rgba(201,162,39,.12)}
+button:disabled{opacity:.35;cursor:not-allowed}
+button.solid{background:var(--gold);color:var(--navy);font-weight:600}
+button.solid:hover:not(:disabled){background:#dcb43a}
+.acoes{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.barra{height:8px;background:var(--navy-3);border-radius:99px;overflow:hidden;margin:14px 0 8px}
+.barra i{display:block;height:100%;width:0;background:var(--gold);transition:width .25s}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin-top:14px}
+.stat{background:var(--navy-3);border-radius:8px;padding:12px 14px}
+.stat span{display:block;font-size:12px;color:var(--ink-dim);letter-spacing:.05em;font-family:'Cinzel',serif}
+.stat b{display:block;font-size:24px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+#log{
+  background:#0a1220;border:1px solid var(--linha);border-radius:8px;
+  padding:12px 14px;max-height:300px;overflow:auto;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.65;
+}
+#log div{padding:1px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.c-ok{color:var(--ok)} .c-erro{color:var(--erro)} .c-dim{color:var(--ink-dim)} .c-gold{color:var(--gold)}
+.aviso{font-size:15px;color:var(--ink-dim);border-left:2px solid var(--gold-dim);padding-left:14px;margin:0 0 18px}
+code{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>ANAGNOSIS</h1>
+<p class="sub">Gerador de lemas — formas de dicionário para o currículo de grego e hebraico</p>
+
+<p class="aviso">Antes de começar, confirme que a visão <code>v_frequencia</code> e a tabela <code>lemas</code> já foram criadas no Supabase. A ferramenta pode ser interrompida e retomada a qualquer momento: ela pula o que já foi gravado.</p>
+
+<div class="card">
+  <h2>Conexão</h2>
+  <div class="grid">
+    <div>
+      <label>URL do Supabase</label>
+      <input id="supaUrl" value="https://ghjbljypxksubmcsvaig.supabase.co">
+    </div>
+    <div>
+      <label>Chave publicável</label>
+      <input id="supaKey" value="sb_publishable_qXCYqg1WdmelY9D1mptZXg_U8NdoKby">
+    </div>
+  </div>
+  <div class="grid" style="margin-top:14px">
+    <div>
+      <label>URL do Cloudflare Worker</label>
+      <input id="worker" placeholder="https://seu-worker.eneaspr.workers.dev">
+    </div>
+    <div>
+      <label>Modelo</label>
+      <select id="modelo">
+        <option value="claude-sonnet-5">claude-sonnet-5 (recomendado)</option>
+        <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 (mais barato)</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Alcance</h2>
+  <div class="grid-3">
+    <div>
+      <label>Palavras gregas</label>
+      <input id="qtdG" type="number" value="500" min="10" max="6000">
+    </div>
+    <div>
+      <label>Palavras hebraicas</label>
+      <input id="qtdH" type="number" value="1000" min="10" max="9000">
+    </div>
+    <div>
+      <label>Por lote</label>
+      <input id="lote" type="number" value="25" min="5" max="40">
+    </div>
+  </div>
+  <div class="acoes" style="margin-top:18px">
+    <button id="btnTestar" class="solid">Testar conexões</button>
+    <button id="btnCarregar">Carregar lista</button>
+    <button id="btnGerar" disabled>Gerar lemas</button>
+    <button id="btnParar" disabled>Parar</button>
+    <button id="btnBaixar" disabled>Baixar cópia</button>
+  </div>
+
+  <div class="barra"><i id="prog"></i></div>
+  <div class="stats">
+    <div class="stat"><span>Na fila</span><b id="sFila">—</b></div>
+    <div class="stat"><span>Já prontos</span><b id="sProntos">—</b></div>
+    <div class="stat"><span>Gerados</span><b id="sFeitos">0</b></div>
+    <div class="stat"><span>Falhas</span><b id="sFalhas">0</b></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Registro</h2>
+  <div id="log"><div class="c-dim">Aguardando.</div></div>
+</div>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let fila = [], gerados = [], parar = false, rodando = false;
+
+function log(msg, cls){
+  const d = document.createElement('div');
+  if(cls) d.className = cls;
+  const h = new Date().toLocaleTimeString('pt-BR');
+  d.textContent = `[${h}] ${msg}`;
+  $('log').appendChild(d);
+  $('log').scrollTop = $('log').scrollHeight;
+}
+function limpaLog(){ $('log').innerHTML = ''; }
+function cfg(){
+  return {
+    url: $('supaUrl').value.trim().replace(/\/+$/,''),
+    key: $('supaKey').value.trim(),
+    worker: $('worker').value.trim().replace(/\/+$/,''),
+    modelo: $('modelo').value
+  };
+}
+function heads(c){ return { apikey:c.key, Authorization:'Bearer '+c.key, 'Content-Type':'application/json' }; }
+
+async function buscarLista(idioma, limite, c){
+  const u = `${c.url}/rest/v1/v_frequencia?idioma=eq.${idioma}&order=ocorrencias.desc&limit=${limite}`
+          + `&select=chave,idioma,ocorrencias,amostra,definicao`;
+  const r = await fetch(u, { headers: heads(c) });
+  if(!r.ok) throw new Error(`Supabase respondeu ${r.status} ao ler v_frequencia`);
+  return r.json();
+}
+
+async function buscarProntos(c){
+  const feitos = new Set();
+  let de = 0;
+  for(;;){
+    const r = await fetch(`${c.url}/rest/v1/lemas?select=chave`, {
+      headers: { ...heads(c), Range: `${de}-${de+999}` }
+    });
+    if(!r.ok) throw new Error(`Supabase respondeu ${r.status} ao ler lemas`);
+    const linhas = await r.json();
+    linhas.forEach(l => feitos.add(l.chave));
+    if(linhas.length < 1000) break;
+    de += 1000;
+  }
+  return feitos;
+}
+
+$('btnTestar').onclick = async () => {
+  const c = cfg();
+  limpaLog();
+  $('btnTestar').disabled = true;
+  let bom = 0;
+
+  log('1. Lendo v_frequencia…','c-dim');
+  try{
+    const r = await fetch(`${c.url}/rest/v1/v_frequencia?limit=1&select=chave`, { headers: heads(c) });
+    if(!r.ok) throw new Error(`HTTP ${r.status} — ${(await r.text()).slice(0,200)}`);
+    const d = await r.json();
+    if(!d.length) throw new Error('a visão existe mas voltou vazia');
+    log(`   Leitura OK (exemplo: ${d[0].chave}).`,'c-ok'); bom++;
+  }catch(e){ log('   FALHOU: '+e.message,'c-erro'); }
+
+  log('2. Gravando uma linha de teste em lemas…','c-dim');
+  try{
+    const r = await fetch(`${c.url}/rest/v1/lemas?on_conflict=chave`, {
+      method:'POST',
+      headers:{ ...heads(c), Prefer:'resolution=merge-duplicates' },
+      body: JSON.stringify([{ chave:'ZZTESTE', idioma:'G', lema:'teste', glosa:'teste' }])
+    });
+    if(!r.ok) throw new Error(`HTTP ${r.status} — ${(await r.text()).slice(0,240)}`);
+    await fetch(`${c.url}/rest/v1/lemas?chave=eq.ZZTESTE`, { method:'DELETE', headers: heads(c) });
+    log('   Escrita OK (linha de teste criada e removida).','c-ok'); bom++;
+  }catch(e){
+    log('   FALHOU: '+e.message,'c-erro');
+    log('   Provável causa: as políticas de escrita não existem na tabela lemas.','c-dim');
+  }
+
+  log('3. Chamando o Worker…','c-dim');
+  if(!c.worker){
+    log('   Pulado: informe a URL do Worker.','c-erro');
+  }else{
+    try{
+      const r = await fetch(c.worker, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          model:c.modelo, max_tokens:64,
+          messages:[{role:'user',content:'Responda apenas: funcionou'}]
+        })
+      });
+      const bruto = await r.text();
+      if(!r.ok) throw new Error(`HTTP ${r.status} — ${bruto.slice(0,300)}`);
+      let d; try{ d = JSON.parse(bruto); }catch{ throw new Error('resposta não é JSON: '+bruto.slice(0,200)); }
+      const txt = (d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+      if(!txt) throw new Error('resposta sem campo content: '+bruto.slice(0,300));
+      log(`   Worker OK. Devolveu: "${txt.trim().slice(0,60)}"`,'c-ok'); bom++;
+    }catch(e){
+      log('   FALHOU: '+e.message,'c-erro');
+      log('   Se o erro fala em CORS ou "Failed to fetch", o Worker está bloqueando esta página.','c-dim');
+    }
+  }
+
+  log(bom === 3 ? 'Os três testes passaram. Pode carregar a lista.' : `${bom} de 3 testes passaram. Corrija o que falhou antes de gerar.`, bom === 3 ? 'c-gold' : 'c-erro');
+  $('btnTestar').disabled = false;
+};
+
+$('btnCarregar').onclick = async () => {
+  const c = cfg();
+  if(!c.url || !c.key){ log('Preencha a URL e a chave do Supabase.','c-erro'); return; }
+  limpaLog();
+  $('btnCarregar').disabled = true;
+  try{
+    log('Lendo a lista de frequência…');
+    const [g, h] = await Promise.all([
+      buscarLista('G', +$('qtdG').value, c),
+      buscarLista('H', +$('qtdH').value, c)
+    ]);
+    log(`Grego: ${g.length} verbetes. Hebraico: ${h.length} verbetes.`,'c-dim');
+
+    log('Verificando o que já foi gravado…');
+    const prontos = await buscarProntos(c);
+
+    fila = [...g, ...h].filter(v => !prontos.has(v.chave));
+    $('sFila').textContent = fila.length.toLocaleString('pt-BR');
+    $('sProntos').textContent = prontos.size.toLocaleString('pt-BR');
+    $('sFeitos').textContent = '0';
+    $('sFalhas').textContent = '0';
+    gerados = [];
+
+    if(!fila.length){
+      log('Nada a fazer: todos os verbetes já têm lema gravado.','c-ok');
+    }else{
+      const semDef = fila.filter(v => !v.definicao).length;
+      log(`${fila.length} verbetes na fila (${semDef} deles sem definição no léxico).`,'c-gold');
+      log('Informe a URL do Worker e clique em Gerar lemas.','c-dim');
+      $('btnGerar').disabled = false;
+    }
+  }catch(e){
+    log('Erro: '+e.message,'c-erro');
+  }
+  $('btnCarregar').disabled = false;
+};
+
+const SISTEMA = `Você é um lexicógrafo especializado em grego koiné do Novo Testamento e hebraico bíblico.
+Para cada verbete recebido, devolva a forma de dicionário (lema) e uma glosa concisa em português.
+
+Convenções da forma lexical:
+- Substantivos hebraicos: absoluto singular, com pontuação massorética completa.
+- Verbos hebraicos: qal perfeito 3ª pessoa masculino singular (ou o binyan atestado, se o qal não ocorrer).
+- Substantivos e adjetivos gregos: nominativo singular.
+- Verbos gregos: presente ativo indicativo 1ª pessoa singular, com acentuação e espíritos.
+
+Regras:
+- A glosa tem no máximo seis palavras e traz os sentidos principais separados por vírgula.
+- A categoria é uma só palavra: substantivo, verbo, adjetivo, advérbio, preposição, conjunção, pronome, partícula, numeral ou nome-próprio.
+- A nota é opcional, com no máximo doze palavras, e só aparece quando houver risco real de erro exegético: amplitude semântica ampla, homógrafos ou falso cognato. Caso contrário, deixe vazia.
+- A transliteração é simples, sem sinais diacríticos técnicos.
+
+Responda APENAS com um array JSON, sem cercas de código e sem qualquer texto antes ou depois.
+Cada item: {"chave","lema","translit","glosa","categoria","nota"}
+A chave devolvida deve ser idêntica à recebida.`;
+
+async function chamarIA(lote, c){
+  const entrada = lote.map(v => ({
+    chave: v.chave,
+    ocorre: v.ocorrencias,
+    forma_no_texto: v.amostra || null,
+    definicao: v.definicao ? String(v.definicao).slice(0,240) : null
+  }));
+
+  const r = await fetch(c.worker, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model: c.modelo,
+      max_tokens: 4000,
+      system: SISTEMA,
+      messages: [{ role:'user', content:
+        'Verbetes (o prefixo G indica grego, H indica hebraico; o número é o Strong):\n'
+        + JSON.stringify(entrada, null, 1) }]
+    })
+  });
+
+  if(!r.ok) throw new Error(`Worker respondeu ${r.status}`);
+  const dados = await r.json();
+  const texto = (dados.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+  const limpo = texto.replace(/```json|```/g,'').trim();
+  const ini = limpo.indexOf('['), fim = limpo.lastIndexOf(']');
+  if(ini === -1 || fim === -1) throw new Error('A resposta não continha um array JSON');
+  return JSON.parse(limpo.slice(ini, fim+1));
+}
+
+async function gravar(itens, c){
+  const r = await fetch(`${c.url}/rest/v1/lemas?on_conflict=chave`, {
+    method:'POST',
+    headers:{ ...heads(c), Prefer:'resolution=merge-duplicates' },
+    body: JSON.stringify(itens)
+  });
+  if(!r.ok) throw new Error(`Supabase recusou a gravação (${r.status}): ${await r.text()}`);
+}
+
+$('btnGerar').onclick = async () => {
+  const c = cfg();
+  if(!c.worker){ log('Informe a URL do Worker.','c-erro'); return; }
+
+  parar = false; rodando = true;
+  $('btnGerar').disabled = true; $('btnCarregar').disabled = true;
+  $('btnParar').disabled = false;
+
+  const tam = +$('lote').value;
+  const total = fila.length;
+  let feitos = 0, falhas = 0;
+
+  for(let i = 0; i < fila.length && !parar; i += tam){
+    const lote = fila.slice(i, i + tam);
+    const n = Math.floor(i/tam) + 1;
+    const totLotes = Math.ceil(fila.length/tam);
+    try{
+      log(`Lote ${n} de ${totLotes} — ${lote.length} verbetes…`,'c-dim');
+      const saida = await chamarIA(lote, c);
+
+      const porChave = Object.fromEntries(lote.map(v => [v.chave, v]));
+      const linhas = saida
+        .filter(o => o && o.chave && porChave[o.chave])
+        .map(o => ({
+          chave: o.chave,
+          idioma: porChave[o.chave].idioma,
+          lema: o.lema || null,
+          translit: o.translit || null,
+          glosa: o.glosa || null,
+          categoria: o.categoria || null,
+          nota: o.nota || null,
+          ocorrencias: porChave[o.chave].ocorrencias
+        }));
+
+      if(!linhas.length) throw new Error('nenhum item aproveitável no lote');
+
+      await gravar(linhas, c);
+      gerados.push(...linhas);
+      feitos += linhas.length;
+
+      const perdidos = lote.length - linhas.length;
+      if(perdidos > 0){ falhas += perdidos; log(`  ${perdidos} verbete(s) não retornaram.`,'c-erro'); }
+      log(`  ${linhas.length} gravados. Exemplo: ${linhas[0].lema} — ${linhas[0].glosa}`,'c-ok');
+    }catch(e){
+      falhas += lote.length;
+      log(`  Lote ${n} falhou: ${e.message}`,'c-erro');
+    }
+
+    $('sFeitos').textContent = feitos.toLocaleString('pt-BR');
+    $('sFalhas').textContent = falhas.toLocaleString('pt-BR');
+    $('prog').style.width = Math.round(100*(i+tam)/total) + '%';
+    $('btnBaixar').disabled = gerados.length === 0;
+    await new Promise(s => setTimeout(s, 400));
+  }
+
+  $('prog').style.width = '100%';
+  log(parar ? `Interrompido. ${feitos} gravados.` : `Concluído. ${feitos} lemas gravados, ${falhas} falhas.`, parar ? 'c-dim' : 'c-gold');
+  if(!parar && falhas > 0) log('Clique em Carregar lista e depois em Gerar para tentar de novo só os que faltaram.','c-dim');
+
+  rodando = false;
+  $('btnGerar').disabled = false; $('btnCarregar').disabled = false;
+  $('btnParar').disabled = true;
+};
+
+$('btnParar').onclick = () => { parar = true; log('Parando após o lote atual…','c-dim'); };
+
+$('btnBaixar').onclick = () => {
+  const b = new Blob([JSON.stringify(gerados, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = 'lemas-anagnosis.json';
+  a.click();
+};
+</script>
+</body>
+</html>
